@@ -56,8 +56,8 @@ The team will be split into front-end and back-end development, which will requi
 >##### _Back-end Development_:
 >
 >___Henry Eigen___
->* Roles: Programming
->* Skills: Programming
+>* Roles: Collaborate on Django framework
+>* Skills: Python, Django
 >
 >___Ria Patel___
 >* Roles: Project Manager, Collaborate on Django framework, Assist with mock ups
