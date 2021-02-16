@@ -1,8 +1,7 @@
 # Easy Recommendation
-#### Prepared by: Team EasyRec
+### Prepared by: Team EasyRec
 
-#### Team Members:
-__Henry Eigen, Jovan Hernandez, Ria Patel, Ross Ketron__
+### Team Members: __Henry Eigen, Jovan Hernandez, Ria Patel, Ross Ketron__
 
 ---
 
