@@ -40,7 +40,7 @@ Users will be able to create an account, request references, view letters upload
 The site will have a home page, login page, and a user profile page which will display the user’s available letters and allow users to send letters via an api key which will give the recipient viewing access.
 
 
-![alt text](https://github.com/CS340-21/EasyRec/Images/TechFlowDiagram.png?raw=true)
+![](https://github.com/CS340-21/EasyRec/blob/main/Images/TechFlowDiagram.png)
 
 ReactJS framework will be used to implement the frontend of EasyRec, and Python Django framework will be used to implement the backend and api of the application. Both of these technologies have documentation and many online sources for reference. There are several modules that can be used along with React to effectively abstract some of the development process for the frontend (material-ui, etc.). 
 
