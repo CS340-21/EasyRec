@@ -39,6 +39,9 @@ EasyRec will consist of a backend api used to process requests and posts. Levera
 Users will be able to create an account, request references, view letters uploaded by referrers, and send letters to potential employers. The frontend of EasyRec will serve to give a simple, elegant user interface. 
 The site will have a home page, login page, and a user profile page which will display the user’s available letters and allow users to send letters via an api key which will give the recipient viewing access.
 
+
+![alt text](https://github.com/CS340-21/EasyRec/Images/TechFlowDiagram.png?raw=true)
+
 ReactJS framework will be used to implement the frontend of EasyRec, and Python Django framework will be used to implement the backend and api of the application. Both of these technologies have documentation and many online sources for reference. There are several modules that can be used along with React to effectively abstract some of the development process for the frontend (material-ui, etc.). 
 
 We consider a minimal viable system of EasyRec to be one that allows a user to create an account, request a reference letter, upload a reference letter, and submit a reference letter. 
