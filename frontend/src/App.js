@@ -1,8 +1,10 @@
 import HomePage from "./Components/HomePage";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
+import {BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import CandidateAccount from "./Components/CandidateAccount";
 import "./App.css";
 
-const useStyles = makeStyles((theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     container: {
       width: "100%",
@@ -20,8 +22,18 @@ const useStyles = makeStyles((theme) =>
 function App() {
   const style = useStyles();
   return (
-    <div className="App" className={style.container}>
-      <HomePage />
+    <div>
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <div className={style.container}>
+              <HomePage />
+            </div>
+          </Route>
+          <Route exact path="/genericCandidateAccount" component={CandidateAccount} />
+        </Switch>
+        
+      </Router>
     </div>
   );
 }
