@@ -3,7 +3,7 @@
       position: fixed;
       top: 0;
       right: 0;
-      margin: 0 30px;
+      /* margin: 0 30px; */
       background: none;
       max-width: 550px;
       height: 120px;
@@ -53,7 +53,10 @@
     border: solid white 1px;
   }
   
-  .navLinkWrapper:hover { color: crimson; }
+  .navLinkWrapper:hover { 
+    color: crimson;
+    cursor: pointer;
+  }
 
   .navLink:hover {
       cursor: pointer;

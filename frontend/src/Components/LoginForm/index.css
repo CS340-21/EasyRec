@@ -1,0 +1,29 @@
+.formContainer{
+    position: fixed;
+    min-height: 50vh; 
+    min-width: 50vh;
+    background: rgba(255,255,255,0.7);
+    text-align: center;
+    /* Code below Centers the form on the screen */
+    top: 50%;
+    left: 50%;
+    margin-top: -25vh;
+    margin-left: -25vh;
+}
+
+.loginForm{
+    display: flex;
+    flex-flow: column nowrap;
+    /* justify-content: space-evenly; */
+    /* align-items: center; */
+}
+
+.loginForm .entryField{
+    flex: 2 1 40%;
+    /* border: violet 1px solid; */
+}
+
+.loginForm .submitButton{
+    flex: 1 1 10%;
+    /* border: violet 1px solid; */
+}
