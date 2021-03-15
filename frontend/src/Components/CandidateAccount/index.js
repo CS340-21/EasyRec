@@ -105,9 +105,22 @@ function ResponsiveDrawer(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
-            Responsive drawer
-          </Typography>
+            {(() => {
+              switch (mainContent) {
+                case "Letters":
+                  return (
+                    <Typography variant="h6" noWrap>Available Letters of Recommendation</Typography>
+                  );
+                case "Request":
+                  return (
+                    <Typography variant="h6" noWrap>Request Letter of Recommendation</Typography>
+                  );
+                default:
+                  return (
+                    <Typography variant="h6" noWrap>Account Overview</Typography>
+                  );
+              }
+            })()}
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">
