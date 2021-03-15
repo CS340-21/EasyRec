@@ -16,14 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
+from rest_framework.urlpatterns import format_suffix_patterns
 from letters import views
 
-router = routers.DefaultRouter()
-router.register(r'letter', views.LetterView, 'letter')
-router.register(r'user', views.UserView, 'user')
+#router = routers.DefaultRouter()
+#router.register(r'letter', views.LetterView, 'letter')
+#router.register(r'user', views.UserView, 'user')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
+    path('api/user/<int:pk>', views.UserView.as_view()),
+    path('api/letter/<int:pk>', views.LetterView.as_view()),
+    #path('api/', include(router.urls)),
 ]
 
+urlpatterns = format_suffix_patterns(urlpatterns)
