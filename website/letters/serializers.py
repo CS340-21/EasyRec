@@ -22,4 +22,9 @@ class UserSerializer(serializers.ModelSerializer):
 class LetterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Letter
-        fields = ('id', 'pub_date', 'author', 'candidate', 'file_path', 'title', 'permissions')
+        fields = ('id', 'author', 'candidate', 'file_path', 'title', 'permissions')
+
+class LetterInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Letter
+        fields = ('id', 'author', 'candidate', 'title', 'permissions')

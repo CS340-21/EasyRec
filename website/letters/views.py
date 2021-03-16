@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from .serializers import UserSerializer, LetterSerializer
+from .serializers import UserSerializer, LetterSerializer, LetterInfoSerializer
 from .models import User, Letter
 
 class UserList(APIView):
@@ -61,7 +61,7 @@ class LetterView(APIView):
 
     def get(self, request, pk, format=None):
         snippet = self.get_object(pk)
-        serializer = LetterSerializer(snippet)
+        serializer = LetterInfoSerializer(snippet)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
@@ -71,7 +71,7 @@ class LetterView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    
     def delete(self, request, pk, format=None):
         letter = self.get_object(pk)
         letter.delete()
