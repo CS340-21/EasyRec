@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'letters.apps.LettersConfig',
     'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -113,6 +114,13 @@ DATABASES = {
     }
 }
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    
+}
 
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'users.serializers.UserSerializer',
