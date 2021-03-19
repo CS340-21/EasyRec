@@ -2,7 +2,9 @@
 
 ### Setting up the environment:
 
-Create a virtual environment with virtualenv or conda. Python 3.9 is ideal, but 3.7 should work as well.
+Python 3.9 is ideal, but anything 3.7+ should work.
+
+It's not necessary, but you probably want to create a virtual environment with virtualenv or conda. 
 
 Run "pip install -r requirements.txt" to install dependencies
 
