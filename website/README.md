@@ -44,20 +44,20 @@ required parameters: username (actually user's email, but the dict entry should 
 
 ### Get user info
 
-Path: localhost:[port]/api/users/[id]
+Path: localhost:[port]/api/user/[id]
 
 Methods: GET, PUT, DELETE
 
-For GET and DELETE, all that is required is that the id be included in the url, (e.g. for id = 5, GET .../api/users/5)
+For GET and DELETE, all that is required is that the id be included in the url, (e.g. for id = 5, GET .../api/user/5)
 
 PUT is still under development
 
 ### Get letter info
 
-Path: localhost:[port]/api/letters/[id]
+Path: localhost:[port]/api/letter/[id]
 
 Methods: GET, PUT, DELETE
 
-For GET and DELETE, all that is required is that the id be included in the url, (e.g. for id = 5, GET .../api/letters/5)
+For GET and DELETE, all that is required is that the id be included in the url, (e.g. for id = 5, GET .../api/letter/5)
 
 PUT is still under development
