@@ -23,6 +23,7 @@ from users import views as user_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('register/', user_views.RegisterView.as_view()),
     path('api/user/<int:pk>', user_views.UserView.as_view()),
     path('api/letter/<int:pk>', letter_views.LetterView.as_view()),
     path('api-token-auth/', user_views.CustomAuthToken.as_view()),

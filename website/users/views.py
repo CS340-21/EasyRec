@@ -4,6 +4,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import generics
 
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
@@ -11,7 +12,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
-from .serializers import UserSerializer
+from .serializers import UserSerializer, RegisterSerializer
 from .models import CustomUser
 
 class UserView(APIView):
@@ -41,6 +42,11 @@ class UserView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class RegisterView(generics.CreateAPIView):
+    queryset = CustomUser.objects.all()
+    #permission_classes = (AllowAny,)
+    serializer_class = RegisterSerializer
+    
 
 class CustomAuthToken(ObtainAuthToken):
 
