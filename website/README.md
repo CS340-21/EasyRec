@@ -1,24 +1,26 @@
+# Getting started
 
-
-## Setting up the environment:
+### Setting up the environment:
 
 Create a virtual environment with virtualenv or conda. Python 3.9 is ideal, but 3.7 should work as well.
 
 Run "pip install -r requirements.txt" to install dependencies
 
-## Getting the Database set up
+### Getting the Database set up
 
 Run "./reset_migrations.sh" to set up the database
 
 Run "./test_populate.sh" to fill the database with dummy data for testing
 
-## Accessing the admin site
+### Accessing the admin site
 
 Run "python manage.py createsuperuser" to set up an admin account
 
 Run "python manage.py runserver" to get the server running
 
 Once you've created a superuser, you can access the admin site at localhost:[port]/admin
+
+# Using the API
 
 ### Register new user
 
