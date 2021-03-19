@@ -36,10 +36,10 @@ export class SignUpForm extends Component {
               />
             </div>
             <div>
-              <h3>Username</h3>
+              <h3>Organization/Institution</h3>
               <TextField
-                id="username"
-                label="New Username"
+                id="Organization/Institution"
+                label="Organization/Institution"
                 variant="standard"
                 fullWidth="true"
               />

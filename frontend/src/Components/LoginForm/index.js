@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { TextField, Button } from "@material-ui/core";
 import "./index.css";
 
@@ -10,14 +10,26 @@ export class LoginForm extends Component {
           <form className="loginForm" action="login" method="post">
             <div className="entryField">
               {/* <h2>Username</h2> */}
-              <TextField id="username" label="Username" variant="standard" />
+              <TextField id="email" label="Email" variant="standard" />
             </div>
             <div className="entryField">
               {/* <h2>Password</h2> */}
               <TextField id="password" label="Password" variant="standard" />
             </div>
             <div className="submitButton">
-              <Button variant="contained">Login</Button>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  fetch("https://api.github.com/users/JovanHernandez").then(
+                    async (res) => {
+                      let d = await res.json();
+                      console.log(d);
+                    }
+                  );
+                }}
+              >
+                Login
+              </Button>
             </div>
           </form>
         </div>
