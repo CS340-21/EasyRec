@@ -28,7 +28,7 @@ Once you've created a superuser, you can access the admin site at localhost:[por
 
 Methods: POST
 
-Path: localhost:[port]/register
+Path: localhost:[port]/api/register
 
 required parameters: email, password, first_name, last_name
 
@@ -38,7 +38,7 @@ optional parameters: organization
 
 Methods: POST
 
-Path: localhost:[port]/api-token-auth
+Path: localhost:[port]/api/token-auth
 
 required parameters: username (actually user's email, but the dict entry should be called username), password
 
@@ -58,6 +58,6 @@ Path: localhost:[port]/api/letters/[id]
 
 Methods: GET, PUT, DELETE
 
-For GET and DELETE, all that is required is that the id be included in the url, (e.g. for id = 5, GET .../api/letter/5)
+For GET and DELETE, all that is required is that the id be included in the url, (e.g. for id = 5, GET .../api/letters/5)
 
 PUT is still under development
