@@ -18,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'first_name', 'last_name', 'organization', 'acct_type', 'written', 'received']
+        fields = ['id', 'email', 'first_name', 'last_name', 'organization', 'written', 'received']
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -34,19 +34,32 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ('password', 'email', 'first_name', 'last_name', 'organization')
         extra_kwargs = {
+            'email': {"error_messages": "Email in use"},
             'first_name': {'required': True},
             'last_name': {'required': True},
             'organization': {'required': False}
         }
 
-        def create(self, validated_data):
-            user = User.objects.create(
+    def create(self, validated_data):
+        
+        '''
+            user = CustomUser.objects.create(
                 email=validated_data['email'],
                 first_name=validated_data['first_name'],
                 last_name=validated_data['last_name']
             )
+            '''
+
             
-            user.set_password(validated_data['password'])
-            user.save()
             
-            return user
+        user = CustomUser.objects.create_user(
+            validated_data['email'],
+            validated_data['password'],
+            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name']
+        )
+            
+        #user.set_password(validated_data['password'])
+        #user.save()
+        
+        return user
