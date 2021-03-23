@@ -12,7 +12,7 @@ Run "pip install -r requirements.txt" to install dependencies
 
 Run "./reset_migrations.sh" to set up the database (make sure to run this from the website directory)
 
-Run "./test_populate.sh" to fill the database with dummy data for testing (this won't work until you start the server as described in the next section)
+Run "python testing.py" to fill the database with dummy data for testing (this won't work until you start the server)
 
 ### Accessing the admin site
 
