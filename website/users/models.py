@@ -27,8 +27,6 @@ class CustomUser(AbstractUser):
 
     organization = models.ForeignKey(Organization, blank=True, null=True, on_delete=models.CASCADE, related_name = 'members')
 
-    acct_type = models.IntegerField(default=0)
-
     @receiver(post_save, sender=settings.AUTH_USER_MODEL)
     def create_auth_token(sender, instance=None, created=False, **kwargs):
         if created:

@@ -12,7 +12,7 @@ Run "pip install -r requirements.txt" to install dependencies
 
 Run "./reset_migrations.sh" to set up the database (make sure to run this from the website directory)
 
-Run "./test_populate.sh" to fill the database with dummy data for testing (this won't work until you start the server as described in the next section)
+Run "python testing.py" to fill the database with dummy data for testing (this won't work until you start the server)
 
 ### Accessing the admin site
 
@@ -28,7 +28,7 @@ Once you've created a superuser, you can access the admin site at localhost:[por
 
 Methods: POST
 
-Path: localhost:[port]/api/register
+Path: localhost:[port]/api/register/
 
 required parameters: email, password, first_name, last_name
 
@@ -38,7 +38,7 @@ optional parameters: organization
 
 Methods: POST
 
-Path: localhost:[port]/api/token-auth
+Path: localhost:[port]/api/token-auth/
 
 required parameters: username (actually user's email, but the dict entry should be called username), password
 
