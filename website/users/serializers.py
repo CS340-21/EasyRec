@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import CustomUser, Organization
 from rest_framework.validators import UniqueValidator
 from .models import CustomUser
+from letters.models import Letter
 
 class OrganizationSerializer(serializers.ModelSerializer):
 
@@ -11,15 +12,18 @@ class OrganizationSerializer(serializers.ModelSerializer):
         model = Organization
         fields = ('id', 'name', 'members')
 
-class UserSerializer(serializers.ModelSerializer):
+class LetterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Letter
+        fields = ('id', 'author', 'candidate', 'title', 'pub_date', 'permissions')
 
-    written = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    received = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+class UserSerializer(serializers.ModelSerializer):
+    written = LetterSerializer(many=True, read_only=True)
+    received = LetterSerializer(many=True, read_only=True)
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'first_name', 'last_name', 'organization', 'acct_type', 'written', 'received']
-
+        fields = ('id', 'email', 'first_name', 'last_name', 'organization', 'acct_type', 'written', 'received')
 
 class RegisterSerializer(serializers.ModelSerializer):
 

@@ -4,7 +4,7 @@ from .models import Letter
 class LetterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Letter
-        fields = ('id', 'author', 'candidate', 'file_path', 'title', 'permissions')
+        fields = ('id', 'author', 'candidate', 'title', 'pub_date', 'permissions')
 
 class LetterInfoSerializer(serializers.ModelSerializer):
     class Meta:
