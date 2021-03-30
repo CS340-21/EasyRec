@@ -33,6 +33,10 @@
     display: inline-block;
     margin: 0 20px;
   }
+  .dropdown:hover{
+    color: crimson;
+    cursor:default;
+  }
   
   /* Dropdown Content (Hidden by Default) */
   .dropdown-content {
