@@ -17,19 +17,7 @@ export class LoginForm extends Component {
               <TextField id="password" label="Password" variant="standard" />
             </div>
             <div className="submitButton">
-              <Button
-                variant="contained"
-                onClick={() => {
-                  fetch("https://api.github.com/users/JovanHernandez").then(
-                    async (res) => {
-                      let d = await res.json();
-                      console.log(d);
-                    }
-                  );
-                }}
-              >
-                Login
-              </Button>
+              <Button variant="contained">Login</Button>
             </div>
           </form>
         </div>
