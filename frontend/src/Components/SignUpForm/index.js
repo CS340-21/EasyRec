@@ -16,6 +16,7 @@ export class SignUpForm extends Component {
 
     //bin this keyword to functions
     this.updateFieldState = this.updateFieldState.bind(this);
+    this.submitForm = this.submitForm.bind(this);
   }
 
   //Updates respective state from Textfields
