@@ -15,33 +15,13 @@ export class SignUpForm extends Component {
     };
 
     //bin this keyword to functions
-    this.changeFirstName = this.changeFirstName.bind(this);
-    this.changeLastName = this.changeLastName.bind(this);
-    this.changeEmail = this.changeEmail.bind(this);
-    this.changeOrganization = this.changeOrganization.bind(this);
-    this.changePW = this.changePW.bind(this);
-    this.changeConfimation = this.changeConfimation.bind(this);
-    this.submitForm = this.submitForm.bind(this);
+    this.updateFieldState = this.updateFieldState.bind(this);
   }
 
-  //Each of the following functions change the respective state values
-  changeFirstName(e) {
-    this.setState({ fname: e.target.value });
-  }
-  changeLastName(e) {
-    this.setState({ lname: e.target.value });
-  }
-  changeEmail(e) {
-    this.setState({ email: e.target.value });
-  }
-  changeOrganization(e) {
-    this.setState({ org: e.target.value });
-  }
-  changePW(e) {
-    this.setState({ pw: e.target.value });
-  }
-  changeConfimation(e) {
-    this.setState({ confirmPw: e.target.value });
+  //Updates respective state from Textfields
+  updateFieldState(e) {
+    const key = e.target.name;
+    this.setState({ [key]: e.target.value });
   }
 
   //Submit post request with forms information
@@ -78,10 +58,11 @@ export class SignUpForm extends Component {
               <TextField
                 id="firstname"
                 label="First Name"
+                name="fname"
                 variant="standard"
                 fullWidth="true"
                 value={this.state.fname}
-                onChange={this.changeFirstName}
+                onChange={this.updateFieldState}
               />
             </div>
             <div>
@@ -89,10 +70,11 @@ export class SignUpForm extends Component {
               <TextField
                 id="lastname"
                 label="Last Name"
+                name="lname"
                 variant="standard"
                 fullWidth="true"
                 value={this.state.lname}
-                onChange={this.changeLastName}
+                onChange={this.updateFieldState}
               />
             </div>
             <div>
@@ -100,10 +82,11 @@ export class SignUpForm extends Component {
               <TextField
                 id="firstname"
                 label="Email"
+                name="email"
                 variant="standard"
                 fullWidth="true"
                 value={this.state.email}
-                onChange={this.changeEmail}
+                onChange={this.updateFieldState}
               />
             </div>
             <div>
@@ -111,10 +94,11 @@ export class SignUpForm extends Component {
               <TextField
                 id="Organization/Institution"
                 label="Organization/Institution"
+                name="org"
                 variant="standard"
                 fullWidth="true"
                 value={this.state.org}
-                onChange={this.changeOrganization}
+                onChange={this.updateFieldState}
               />
             </div>
             <div>
@@ -122,10 +106,11 @@ export class SignUpForm extends Component {
               <TextField
                 id="password"
                 label="New Password"
+                name="pw"
                 variant="standard"
                 fullWidth="true"
                 value={this.state.pw}
-                onChange={this.changePW}
+                onChange={this.updateFieldState}
               />
             </div>
             <div>
@@ -133,10 +118,11 @@ export class SignUpForm extends Component {
               <TextField
                 id="confirmpassword"
                 label="Confirm Password"
+                name="confirmPw"
                 variant="standard"
                 fullWidth="true"
                 value={this.state.confirmPw}
-                onChange={this.changeConfimation}
+                onChange={this.updateFieldState}
               />
             </div>
             <div className="submitButton">
