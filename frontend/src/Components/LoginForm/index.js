@@ -37,15 +37,15 @@ export class LoginForm extends Component {
       "https://eazyrec.herokuapp.com/api/token-auth/",
       reqOptions
     );
+    console.log(res.status);
     const d = await res.json();
     console.log(d);
+    if (res.status === 200) {
+      alert("success");
+    } else if (res.status === 400) {
+      alert("Error signing in");
+    }
 
-    // .then(
-    //   async (res) => {
-    //     let d = await res.json();
-    //     console.log(d);
-    //   }
-    // );
     e.preventDefault();
   }
   render() {
