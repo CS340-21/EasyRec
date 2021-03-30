@@ -7,7 +7,9 @@ export class LoginForm extends Component {
     super(props);
     this.state = {
       username: "",
-      password: "",
+      usernameError: false,
+      pw: "",
+      passwordError: false,
     };
 
     this.updateFieldState = this.updateFieldState.bind(this);
@@ -20,26 +22,34 @@ export class LoginForm extends Component {
     this.setState({ [key]: e.target.value });
   }
 
-  attemptLogin(e) {
-    console.log("attempting login", this.state.username, this.state.password);
+  async attemptLogin(e) {
+    console.log("attempting login", this.state.username, this.state.paw);
     const reqOptions = {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         username: this.state.username,
-        password: this.state.password,
+        password: this.state.pw,
       }),
     };
 
-    fetch("https://eazyrec.herokuapp.com/api/token-auth/", reqOptions).then(
-      async (res) => {
-        let d = await res.json();
-        console.log(d);
-      }
+    const res = await fetch(
+      "https://eazyrec.herokuapp.com/api/token-auth/",
+      reqOptions
     );
+    const d = await res.json();
+    console.log(d);
+
+    // .then(
+    //   async (res) => {
+    //     let d = await res.json();
+    //     console.log(d);
+    //   }
+    // );
     e.preventDefault();
   }
   render() {
+    const { username, usernameError, pw, passwordError } = this.state;
     return (
       <>
         <div className="formContainer">
@@ -50,18 +60,22 @@ export class LoginForm extends Component {
                 label="Email"
                 name="username"
                 variant="standard"
-                value={this.state.username}
+                value={username}
                 onChange={this.updateFieldState}
+                autoComplete="off"
+                error={usernameError}
+                helperText={usernameError ? "Username Error!" : ""}
               />
             </div>
             <div className="entryField">
               <TextField
                 id="password"
                 label="Password"
-                name="password"
+                name="pw"
                 variant="standard"
-                value={this.state.password}
+                value={pw}
                 onChange={this.updateFieldState}
+                type="password"
               />
             </div>
             <div className="submitButton">

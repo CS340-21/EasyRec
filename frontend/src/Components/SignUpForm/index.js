@@ -8,10 +8,11 @@ export class SignUpForm extends Component {
     this.state = {
       fname: "",
       lname: "",
-      email: "",
+      e_mail: "",
       org: null,
       pw: "",
       confirmPw: "",
+      readyToSubmit: false,
     };
 
     //bin this keyword to functions
@@ -32,7 +33,7 @@ export class SignUpForm extends Component {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         password: this.state.pw,
-        email: this.state.email,
+        email: this.state.e_mail,
         first_name: this.state.fname,
         last_name: this.state.lname,
         oragnization: this.state.org,
@@ -49,11 +50,19 @@ export class SignUpForm extends Component {
   }
 
   render() {
-    const props = this.props;
+    const {
+      fname,
+      lname,
+      e_mail,
+      org,
+      pw,
+      confirmPw,
+      readyToSubmit,
+    } = this.state;
     return (
       <>
         <div className="signupFormContainer">
-          <form className="signupForm" action="login" method="post">
+          <form className="signupForm">
             <div>
               <h3>First Name</h3>
               <TextField
@@ -62,7 +71,9 @@ export class SignUpForm extends Component {
                 name="fname"
                 variant="standard"
                 fullWidth="true"
-                value={this.state.fname}
+                value={fname}
+                autoComplete="no"
+                required="true"
                 onChange={this.updateFieldState}
               />
             </div>
@@ -74,19 +85,23 @@ export class SignUpForm extends Component {
                 name="lname"
                 variant="standard"
                 fullWidth="true"
-                value={this.state.lname}
+                value={lname}
+                autoComplete="no"
+                required="true"
                 onChange={this.updateFieldState}
               />
             </div>
             <div>
               <h3>Email</h3>
               <TextField
-                id="firstname"
+                id="email"
                 label="Email"
-                name="email"
+                name="e_mail"
                 variant="standard"
                 fullWidth="true"
-                value={this.state.email}
+                value={e_mail}
+                autoComplete="no"
+                required="true"
                 onChange={this.updateFieldState}
               />
             </div>
@@ -98,7 +113,8 @@ export class SignUpForm extends Component {
                 name="org"
                 variant="standard"
                 fullWidth="true"
-                value={this.state.org}
+                value={org}
+                autoComplete="no"
                 onChange={this.updateFieldState}
               />
             </div>
@@ -108,9 +124,12 @@ export class SignUpForm extends Component {
                 id="password"
                 label="New Password"
                 name="pw"
+                type="password"
                 variant="standard"
                 fullWidth="true"
-                value={this.state.pw}
+                value={pw}
+                autoComplete="no"
+                required="true"
                 onChange={this.updateFieldState}
               />
             </div>
@@ -120,14 +139,23 @@ export class SignUpForm extends Component {
                 id="confirmpassword"
                 label="Confirm Password"
                 name="confirmPw"
+                type="password"
                 variant="standard"
                 fullWidth="true"
-                value={this.state.confirmPw}
+                value={confirmPw}
+                autoComplete="no"
+                required="true"
                 onChange={this.updateFieldState}
+                error={pw !== confirmPw}
+                helperText={pw !== confirmPw ? "Passwords don't match!" : ""}
               />
             </div>
             <div className="submitButton">
-              <Button variant="contained" onClick={this.submitForm}>
+              <Button
+                variant="contained"
+                // disabled={!readyToSubmit}
+                onClick={this.submitForm}
+              >
                 Create Account
               </Button>
             </div>
