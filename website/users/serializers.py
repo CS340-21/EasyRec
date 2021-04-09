@@ -3,6 +3,7 @@ from .models import CustomUser, Organization
 from rest_framework.validators import UniqueValidator
 from .models import CustomUser
 from letters.models import Letter
+from letters.serializers import LetterSerializer
 
 class OrganizationSerializer(serializers.ModelSerializer):
 
@@ -11,11 +12,6 @@ class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organization
         fields = ('id', 'name', 'members')
-
-class LetterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Letter
-        fields = ('id', 'author', 'candidate', 'title', 'pub_date', 'permissions')
 
 class UserSerializer(serializers.ModelSerializer):
     written = LetterSerializer(many=True, read_only=True)
