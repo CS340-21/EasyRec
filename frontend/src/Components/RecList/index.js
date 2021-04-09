@@ -11,6 +11,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
+
 // create attended events table for current volunteer
 export default function RecList(props) {
     const classes = useStyles();
@@ -26,19 +27,17 @@ export default function RecList(props) {
                         letters.map(letter => (
                             <TableRow key={letter.title}>
                                 <TableCell component="th" scope="row">
-                                    <h3>{letter.author}</h3>
+                                    {letter.author}
                                 </TableCell>
                                 <TableCell component="th" scope="row">
-                                    <h3>{letter.title}</h3>
+                                    {letter.title}
                                 </TableCell>
                                 <TableCell align="center">
-                                    <h3>
-                                        {letter.pub_date.toLocaleDateString("en-us", {
-                                            month: "2-digit",
-                                            day: "2-digit",
-                                            year: "numeric",
-                                        })}
-                                    </h3>
+                                    {letter.pub_date.toLocaleDateString("en-us", {
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                        year: "numeric",
+                                    })}
                                 </TableCell>
                                 <TableCell align="center">
                                     <button className={classes.iconButton}>
@@ -88,7 +87,7 @@ const useStyles = makeStyles((theme) =>
                 cursor: "pointer",
             },
             "&:active": {
-                transform: "scale(1.15)",
+                transform: "scale(.75)",
             },
         },
     })
