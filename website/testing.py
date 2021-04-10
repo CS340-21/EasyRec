@@ -34,9 +34,8 @@ r_path = base_url + "api/register/"
 for i, u in enumerate(users):
     receive = requests.post(r_path, data=u)
     if receive.status_code != 201:
-        print("\nError", receive.status_code, "when registering user:", i)
-        print(receive.text)
-        sys.exit()
+        print("\n\n    Error", receive.status_code, "when registering user:", i)
+        print("\n  ", receive.text, "\n")
 
 print("Succesfully registered users\n")
 
