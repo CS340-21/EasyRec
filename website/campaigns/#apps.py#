@@ -1,0 +1,5 @@
+from django.apps import AppConfig
+
+campaigns.CampaignConfig
+class CampaignsConfig(AppConfig):
+    name = 'campaigns'
