@@ -11,13 +11,13 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
-
 // create attended events table for current volunteer
-export default function RecList(props) {
+export default function RecList(user) {
     const classes = useStyles();
 
     // Uncomment to use actual volunteer data for volId from server
-    //const letters = props.letters ? props.letters : [];
+    // const written = user.written ? user.written : [];
+    // const received = user.received ? user.received : [];
 
     return (
         <TableContainer component={Paper} className={classes.tableContainer}>
