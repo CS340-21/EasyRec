@@ -12,12 +12,16 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
 // create attended events table for current volunteer
-export default function RecList(user) {
+export default function RecList(user, letterType) {
     const classes = useStyles();
 
-    // Uncomment to use actual volunteer data for volId from server
-    // const written = user.written ? user.written : [];
-    // const received = user.received ? user.received : [];
+    //Uncomment to use actual volunteer data for volId from server
+    let letters;
+    if (letterType === "written") {
+        letters = user.written ? user.written : [];
+    } else {
+        letters = user.received ? user.received : [];
+    }
 
     return (
         <TableContainer component={Paper} className={classes.tableContainer}>
@@ -92,7 +96,7 @@ const useStyles = makeStyles((theme) =>
         },
     })
 );
-
+/*
 // create dummy data for design purposes -- comment out to use volId data
 function createData(pub_date, author, candidate, title, permissions) {
     return { pub_date, author, candidate, title, permissions };
@@ -108,3 +112,4 @@ const letters = [
     createData(new Date("2021-02-15"), "Dr. Ross Ketron", "Ross Ketron", "Some Boring Title", 0),
     createData(new Date("2021-02-15"), "Dr. Ross Ketron", "Ross Ketron", "Some Boring Title", 1),
 ]
+*/

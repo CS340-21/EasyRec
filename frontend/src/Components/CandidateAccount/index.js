@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
@@ -18,47 +17,45 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import RecList from '../RecList';
+import axios from "axios";
+import { TextField, Button } from '@material-ui/core';
 
-const drawerWidth = 240;
+const drawerWidth = 175;
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-  },
-  appBar: {
-    [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth,
-    },
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      display: 'none',
-    },
-  },
-  // necessary for content to be below app bar
-  toolbar: theme.mixins.toolbar,
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-}));
+const getServerSideProps = async (id) => {
+  try {
+    const res = await axios.get(`https://eazyrec.herokuapp.com/api/user/${id}`)
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-function ResponsiveDrawer(props) {
+function ResponsiveDrawer(props, userId) {
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [values, setValues] = React.useState({
+    title: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
+
+  const handleTextChange = (event) => {
+    setValues(values => ({ ...values, [event.target.id]: event.target.value }));
+  };
+
+  const handleRequestSubmitButton = () => {
+    alert("Email is not set up yet but please check back soon");
+  }
+
+
+  userId = 1;
+
+  const user = getServerSideProps(userId);
+  console.log(user);
 
   // Set main content to user home page default.
   // options are 'Home', 'Letters', 'Request'
@@ -73,15 +70,15 @@ function ResponsiveDrawer(props) {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-          <ListItem button key="Home" onClick={() => setMainContent("Home")}>
+          <ListItem button key="WrittenLetters" onClick={() => setMainContent("WrittenLetters")}>
             <ListItemIcon><HomeIcon /></ListItemIcon>
-            <ListItemText primary="Home" />
+            <ListItemText primary="Written" />
           </ListItem>
-          <ListItem button key="Letters" onClick={() => setMainContent("Letters")}>
+          <ListItem button key="ReceivedLetters" onClick={() => setMainContent("ReceivedLetters")}>
             <ListItemIcon><ListIcon /></ListItemIcon>
-            <ListItemText primary="Letters" />
+            <ListItemText primary="Received" />
           </ListItem>
-          <ListItem button key="Request" onClick={() => setMainContent("Request")}>
+          <ListItem button key="RequestLetter" onClick={() => setMainContent("RequestLetter")}>
             <ListItemIcon><SendIcon /></ListItemIcon>
             <ListItemText primary="Request" />
           </ListItem>
@@ -107,17 +104,17 @@ function ResponsiveDrawer(props) {
           </IconButton>
             {(() => {
               switch (mainContent) {
-                case "Letters":
+                case "ReceivedLetters":
                   return (
-                    <Typography variant="h6" noWrap>Available Letters of Recommendation</Typography>
+                    <Typography variant="h6" noWrap>Received Letters of Recommendation</Typography>
                   );
-                case "Request":
+                case "RequestLetter":
                   return (
                     <Typography variant="h6" noWrap>Request Letter of Recommendation</Typography>
                   );
                 default:
                   return (
-                    <Typography variant="h6" noWrap>Account Overview</Typography>
+                    <Typography variant="h6" noWrap>Written Letters of Recommendation</Typography>
                   );
               }
             })()}
@@ -159,22 +156,73 @@ function ResponsiveDrawer(props) {
         {(() => {
           switch (mainContent) {
 
-            case "Letters":
-              return ( <RecList /> );
+            case "ReceivedLetters":
+              return ( <RecList props={{ user: user, letterType: "received" }} /> );
 
-            case "Request":
+            case "RequestLetter":
               return (
-                <Typography paragraph>
-                  This is request content!!
-                </Typography>
+                <>
+                  <div className={classes.requestFormContainer}>
+                    <Typography paragraph>
+                      <TextField
+                        style={{ margin: "10px" }}
+                        id="title"
+                        label="Title"
+                        type="text"
+                        variant="outlined"
+                        value={values.title}
+                        rowsMax={4}
+                        onChange={handleTextChange}
+                      />
+                      <TextField
+                        style={{ margin: "10px" }}
+                        id="firstName"
+                        label="First Name"
+                        type="text"
+                        variant="outlined"
+                        required
+                        value={values.firstName}
+                        rowsMax={4}
+                        onChange={handleTextChange}
+                      />
+                      <TextField
+                        style={{ margin: "10px" }}
+                        id="lastName"
+                        label="Last Name"
+                        type="text"
+                        variant="outlined"
+                        required
+                        value={values.lastName}
+                        rowsMax={4}
+                        onChange={handleTextChange}
+                      />
+                      <TextField
+                        style={{ margin: "10px" }}
+                        id="email"
+                        label="Email"
+                        type="text"
+                        variant="outlined"
+                        required
+                        value={values.email}
+                        rowsMax={4}
+                        onChange={handleTextChange}
+                      />
+                    </Typography>
+                  </div>
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    className={classes.button}
+                    style={{ marginTop: "40px", marginLeft: "150px" }}
+                    onClick={handleRequestSubmitButton}
+                  >
+                    Send Request Email
+                  </Button>
+                </>
               );
 
-            default: //this includes initial state: 'Home'
-              return (
-                <Typography paragraph>
-                  This is account home content!!
-                </Typography>
-              );
+            default: //this is the user's received letters
+              return ( <RecList props={{ user: user, letterType: "written" }} /> );
           }
         })()}
       </main>
@@ -182,12 +230,50 @@ function ResponsiveDrawer(props) {
   );
 }
 
-ResponsiveDrawer.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window: PropTypes.func,
-};
-
 export default ResponsiveDrawer;
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+  },
+  drawer: {
+    [theme.breakpoints.up('sm')]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+  },
+  appBar: {
+    backgroundColor: "inherit",
+    color: "black",
+    [theme.breakpoints.up('sm')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+    },
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
+  },
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
+  requestFormContainer: {
+    margin: "10px",
+  },
+  button: {
+    backgroundColor: "#343d52",
+    color: "white",
+    minWidth: "150px",
+    "&:hover": {
+      backgroundColor: "#5d6475"
+    },
+  },
+}));
