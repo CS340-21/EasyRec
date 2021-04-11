@@ -10,18 +10,37 @@ import PublishIcon from '@material-ui/icons/Publish';
 import DeleteIcon from '@material-ui/icons/Delete';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import Popover from '@material-ui/core/Popover';
+import { TextField } from "@material-ui/core";
 
 // create attended events table for current volunteer
 export default function RecList(user, letterType) {
     const classes = useStyles();
+    const [recipientCode, setRecipientCode] = React.useState("");
+    const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleLetterSend = () => {
         alert("Letter sending is not yet set up");
     }
 
+    const handlePopoverOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    }
+
+    const handlePopoverClose = () => {
+        setAnchorEl(null);
+    }
+
+    const handleTextChange = (event) => {
+        setRecipientCode(event.target.value);
+    }
+
     const handleLetterDelete = () => {
         alert("Letter removal is not yet set up");
     }
+
+    const popoverOpen = Boolean(anchorEl);
+    const popoverId = popoverOpen ? "simple-popover" : undefined;
 
     //Uncomment to use actual volunteer data for volId from server
     /*
@@ -60,8 +79,37 @@ export default function RecList(user, letterType) {
                                 </TableCell>
                                 <TableCell style={{width: "20px"}}>
                                     <button className={classes.iconButton}>
-                                        <PublishIcon onClick={handleLetterSend}/>
+                                        <PublishIcon onClick={handlePopoverOpen} />
                                     </button>
+                                    <Popover
+                                        id={popoverId}
+                                        open={popoverOpen}
+                                        anchorEl={anchorEl}
+                                        onClose={handlePopoverClose}
+                                        anchorOrigin={{
+                                        vertical: 'center',
+                                        horizontal: 'center',
+                                        }}
+                                        transformOrigin={{
+                                        vertical: 'center',
+                                        horizontal: 'center',
+                                        }}
+                                    >
+                                        <TextField
+                                            id="code"
+                                            label="Recipient Code"
+                                            type="text"
+                                            variant="filled"
+                                            value={recipientCode}
+                                            onChange={handleTextChange}
+                                        />
+                                        <button className={classes.iconButton}>
+                                            <PublishIcon 
+                                                style={{ marginTop: "15px" }}
+                                                onClick={handleLetterSend} 
+                                            />
+                                        </button>
+                                    </Popover>
                                 </TableCell>
                                 <TableCell>
                                     <button className={classes.iconButton}>
