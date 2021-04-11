@@ -14,7 +14,7 @@ import Popover from '@material-ui/core/Popover';
 import { TextField } from "@material-ui/core";
 
 // create attended events table for current volunteer
-export default function RecList(user, letterType) {
+export default function RecList({ user, letterType }) {
     const classes = useStyles();
     const [recipientCode, setRecipientCode] = React.useState("");
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -43,14 +43,12 @@ export default function RecList(user, letterType) {
     const popoverId = popoverOpen ? "simple-popover" : undefined;
 
     //Uncomment to use actual volunteer data for volId from server
-    /*
     let letters;
     if (letterType === "written") {
         letters = user.written ? user.written : [];
     } else {
         letters = user.received ? user.received : [];
     }
-    */
 
     return (
         <TableContainer component={Paper} className={classes.tableContainer}>
@@ -144,17 +142,23 @@ const useStyles = makeStyles((theme) =>
         },
         iconButton: {
             background: "none",
+            outline: "none",
             borderStyle: "none",
             "&:hover": {
+                outline: "none",
                 cursor: "pointer",
+                border: "none",
             },
             "&:active": {
+                outline: "none",
                 transform: "scale(.75)",
+                border: "none",
             },
         },
     })
 );
 
+/*
 // create dummy data for design purposes -- comment out to use volId data
 function createData(pub_date, author, candidate, title, permissions) {
     return { pub_date, author, candidate, title, permissions };
@@ -170,3 +174,4 @@ const letters = [
     createData(new Date("2021-02-15"), "Dr. Ross Ketron", "Ross Ketron", "Some Boring Title", 0),
     createData(new Date("2021-02-15"), "Dr. Ross Ketron", "Ross Ketron", "Some Boring Title", 1),
 ]
+*/

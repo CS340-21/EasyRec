@@ -10,6 +10,7 @@ import List from "@material-ui/core/List";
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import SendIcon from '@material-ui/icons/Send';
 import ListIcon from '@material-ui/icons/ViewList';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -21,15 +22,6 @@ import axios from "axios";
 import { TextField, Button } from '@material-ui/core';
 
 const drawerWidth = 175;
-
-const getServerSideProps = async (id) => {
-  try {
-    const res = await axios.get(`https://eazyrec.herokuapp.com/api/user/${id}`)
-    return res.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 function ResponsiveDrawer(props, userId) {
   const { window } = props;
@@ -57,6 +49,14 @@ function ResponsiveDrawer(props, userId) {
     }
   }
 
+  const getServerSideProps = async (id) => {
+    try {
+      const res = await axios.get(`https://eazyrec.herokuapp.com/api/user/${id}`)
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   userId = 1;
 
@@ -88,6 +88,10 @@ function ResponsiveDrawer(props, userId) {
             <ListItemIcon><SendIcon /></ListItemIcon>
             <ListItemText primary="Request" />
           </ListItem>
+          <ListItem button key="UploadLetter" onClick={() => setMainContent("UploadLetter")}>
+            <ListItemIcon><CloudUploadIcon /></ListItemIcon>
+            <ListItemText primary="Upload" />
+          </ListItem>
       </List>
     </div>
   );
@@ -118,6 +122,10 @@ function ResponsiveDrawer(props, userId) {
                   return (
                     <Typography variant="h6" noWrap>Request Letter of Recommendation</Typography>
                   );
+                case "UploadLetter":
+                  return (
+                    <Typography variant="h6" noWrap>Upload a Letter of Recommendation</Typography>
+                  )
                 default:
                   return (
                     <Typography variant="h6" noWrap>Written Letters of Recommendation</Typography>
@@ -163,7 +171,12 @@ function ResponsiveDrawer(props, userId) {
           switch (mainContent) {
 
             case "ReceivedLetters":
-              return ( <RecList props={{ user: user, letterType: "received" }} /> );
+              return ( <RecList user={user} letterType="received" /> );
+
+            case "UploadLetter":
+              return (
+                <h4>File Dropzone Will Go Here</h4>
+              )
 
             case "RequestLetter":
               return (
@@ -227,7 +240,7 @@ function ResponsiveDrawer(props, userId) {
                 </>
               );
 
-            default: //this is the user's received letters
+            default: //this is the user's written letters
               return ( <RecList user={user} letterType="written" /> );
           }
         })()}
