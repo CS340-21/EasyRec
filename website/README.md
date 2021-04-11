@@ -28,7 +28,7 @@ Once you've created a superuser, you can access the admin site at localhost:[por
 
 Methods: POST
 
-Path: localhost:[port]/api/register/
+Path: /api/register/
 
 required parameters: email, password, first_name, last_name
 
@@ -38,13 +38,13 @@ optional parameters: organization
 
 Methods: POST
 
-Path: localhost:[port]/api/token-auth/
+Path: /api/token-auth/
 
 required parameters: username (actually user's email, but the dict entry should be called username), password
 
 ### Get user info
 
-Path: localhost:[port]/api/user/[id]
+Path: /api/user/[id]
 
 Methods: GET, PUT, DELETE
 
@@ -54,10 +54,25 @@ PUT is still under development
 
 ### Get letter info
 
-Path: localhost:[port]/api/letter/[id]
+Path: /api/letter/[id]
 
 Methods: GET, PUT, DELETE
 
 For GET and DELETE, all that is required is that the id be included in the url, (e.g. for id = 5, GET .../api/letter/5)
 
 PUT is still under development
+
+### Upload Letter
+
+Path: /api/upload/
+
+Methods: POST
+
+Takes a file object as well as a json containing the id of the author and the email of the recipient
+
+Python Ex.
+
+files = {'file': open("example_file.txt", "rb")}
+values = {'author_id': '2', 'email': 'bobby@aol.com'}
+
+requests.post(url, files=files, data=values)
