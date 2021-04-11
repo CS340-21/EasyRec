@@ -15,13 +15,23 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 export default function RecList(user, letterType) {
     const classes = useStyles();
 
+    const handleLetterSend = () => {
+        alert("Letter sending is not yet set up");
+    }
+
+    const handleLetterDelete = () => {
+        alert("Letter removal is not yet set up");
+    }
+
     //Uncomment to use actual volunteer data for volId from server
+    /*
     let letters;
     if (letterType === "written") {
         letters = user.written ? user.written : [];
     } else {
         letters = user.received ? user.received : [];
     }
+    */
 
     return (
         <TableContainer component={Paper} className={classes.tableContainer}>
@@ -50,12 +60,12 @@ export default function RecList(user, letterType) {
                                 </TableCell>
                                 <TableCell style={{width: "20px"}}>
                                     <button className={classes.iconButton}>
-                                        <PublishIcon/>
+                                        <PublishIcon onClick={handleLetterSend}/>
                                     </button>
                                 </TableCell>
                                 <TableCell>
                                     <button className={classes.iconButton}>
-                                        <DeleteIcon/>
+                                        <DeleteIcon onClick={handleLetterDelete} />
                                     </button>
                                 </TableCell>
                             </TableRow>
@@ -96,7 +106,7 @@ const useStyles = makeStyles((theme) =>
         },
     })
 );
-/*
+
 // create dummy data for design purposes -- comment out to use volId data
 function createData(pub_date, author, candidate, title, permissions) {
     return { pub_date, author, candidate, title, permissions };
@@ -112,4 +122,3 @@ const letters = [
     createData(new Date("2021-02-15"), "Dr. Ross Ketron", "Ross Ketron", "Some Boring Title", 0),
     createData(new Date("2021-02-15"), "Dr. Ross Ketron", "Ross Ketron", "Some Boring Title", 1),
 ]
-*/
