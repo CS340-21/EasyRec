@@ -48,7 +48,13 @@ function ResponsiveDrawer(props, userId) {
   };
 
   const handleRequestSubmitButton = () => {
-    alert("Email is not set up yet but please check back soon");
+    if (values.firstName === "" || 
+        values.lastName === "" ||
+        values.email === "") {
+      alert("Please fill all required fields");
+    } else {
+      alert("Email is not set up yet but please check back soon");
+    }
   }
 
 
@@ -222,7 +228,7 @@ function ResponsiveDrawer(props, userId) {
               );
 
             default: //this is the user's received letters
-              return ( <RecList props={{ user: user, letterType: "written" }} /> );
+              return ( <RecList user={user} letterType="written" /> );
           }
         })()}
       </main>
