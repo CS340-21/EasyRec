@@ -60,6 +60,7 @@ CORS_ORIGIN_WHITELIST = [
 INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'letters.apps.LettersConfig',
+    'campaigns.apps.CampaignsConfig',
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',

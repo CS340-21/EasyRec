@@ -26,8 +26,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/register/', user_views.RegisterView.as_view()),
     path('api/user/<int:pk>', user_views.UserView.as_view()),
+    path('api/upload/', letter_views.RegisterView.as_view()),
     path('api/letter/<int:pk>', letter_views.LetterView.as_view()),
-    #path('api/token-auth/', obtain_auth_token),
     path('api/token-auth/', user_views.CustomAuthToken.as_view())
 ]
 

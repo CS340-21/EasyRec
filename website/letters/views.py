@@ -6,8 +6,10 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import generics
 
 from .serializers import LetterSerializer, LetterInfoSerializer
+
 from .models import Letter
     
 class LetterView(APIView):
@@ -34,3 +36,42 @@ class LetterView(APIView):
         letter = self.get_object(pk)
         letter.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+from rest_framework.serializers import ValidationError
+from rest_framework.exceptions import ParseError
+from rest_framework.parsers import FileUploadParser
+from rest_framework.response import Response
+from users.models import CustomUser
+
+class RegisterView(APIView):
+    parser_class = (FileUploadParser,)
+
+    def post(self, request, format=None):
+        if 'file' not in request.data:
+            raise ParseError("Empty content")
+
+        author_id = request.data['author_id']
+        candidate_email = request.data['email']
+
+        # verify email exists
+        try:
+            tmp = CustomUser.objects.get(email=candidate_email)
+        except:
+            raise ValidationError('No user associated with this email')
+        
+        author = CustomUser.objects.get(pk = int(author_id))
+        candidate = CustomUser.objects.get(email = candidate_email)
+
+        file_obj = request.data['file']
+
+        letter = Letter.objects.create(
+            author = author,
+            candidate = candidate,
+            file_doc = file_obj,
+            title = file_obj.name
+        )
+
+        letter.save()
+
+        return Response(status=status.HTTP_201_CREATED)
