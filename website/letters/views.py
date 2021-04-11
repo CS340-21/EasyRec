@@ -9,7 +9,6 @@ from rest_framework import status
 from rest_framework import generics
 
 from .serializers import LetterSerializer, LetterInfoSerializer
-from .serializers import RegisterSerializer
 
 from .models import Letter
     
