@@ -11,6 +11,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import GroupWorkIcon from '@material-ui/icons/GroupWork';
 import SendIcon from '@material-ui/icons/Send';
 import ListIcon from '@material-ui/icons/ViewList';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -31,6 +32,7 @@ function ResponsiveDrawer(props, userId) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [mainContent, setMainContent] = React.useState("WrittenLetters");
   const [user, setUser] = React.useState([]);
+  const [showCampaignList, setShowCampaignList] = React.useState("none");
   const [values, setValues] = React.useState({
     title: "",
     firstName: "",
@@ -91,11 +93,8 @@ function ResponsiveDrawer(props, userId) {
       })
       .catch(res => console.log(res));
   };
-
-
-
+  
   getServerSideProps(userId);
-  console.log(user);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -121,6 +120,10 @@ function ResponsiveDrawer(props, userId) {
           <ListItem button key="UploadLetter" onClick={() => setMainContent("UploadLetter")}>
             <ListItemIcon><CloudUploadIcon /></ListItemIcon>
             <ListItemText primary="Upload" />
+          </ListItem>
+          <ListItem button key="Campaigns" onClick={() => setMainContent("Campaigns")}>
+            <ListItemIcon><GroupWorkIcon /></ListItemIcon>
+            <ListItemText primary="Campaigns" />
           </ListItem>
       </List>
     </div>
@@ -158,6 +161,11 @@ function ResponsiveDrawer(props, userId) {
                 case "UploadLetter":
                   return (
                     <Typography variant="h6" noWrap>Upload Letter of Recommendation</Typography>
+                  );
+
+                case "Campaigns":
+                  return (
+                    <Typography variant="h6" noWrap>Your Active Campaigns</Typography>
                   );
 
                 default:
@@ -309,6 +317,9 @@ function ResponsiveDrawer(props, userId) {
                   </Button>
                 </>
               );
+
+            case "Campaigns":
+              return ( <h1>Hi this is not done yet</h1> );
 
             default: //this is the user's written letters
               return ( <RecList user={user} letterType="written" /> );

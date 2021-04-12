@@ -12,6 +12,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import Popover from '@material-ui/core/Popover';
 import { TextField } from "@material-ui/core";
+import axios from "axios";
 
 // create attended events table for current volunteer
 export default function RecList({ user, letterType }) {
@@ -35,8 +36,22 @@ export default function RecList({ user, letterType }) {
         setRecipientCode(event.target.value);
     }
 
-    const handleLetterDelete = () => {
-        alert("Letter removal is not yet set up");
+    const handleLetterDelete = (event) => {
+        deleteLetter(event.target.id)
+    }
+
+    // TODO: This does not work correctly
+    const deleteLetter = (letterId) => {
+        const reqOptions = {
+            method: "DELETE",
+        };
+      
+        fetch(`https://eazyrec.herokuapp.com/api/letter/${letterId}`, reqOptions).then(
+            async (res) => {
+                let d = await res.json();
+                console.log(d);
+            }
+        );
     }
 
     const popoverOpen = Boolean(anchorEl);
@@ -107,7 +122,7 @@ export default function RecList({ user, letterType }) {
                                 </TableCell>
                                 <TableCell>
                                     <button className={classes.iconButton}>
-                                        <DeleteIcon onClick={handleLetterDelete} />
+                                        <DeleteIcon id={letter.id} onClick={handleLetterDelete} />
                                     </button>
                                 </TableCell>
                             </TableRow>
