@@ -43,10 +43,13 @@ export default function RecList({ user, letterType }) {
     // TODO: This does not work correctly
     const deleteLetter = (letterId) => {
         const reqOptions = {
-            method: "DELETE",
+            method: "delete",
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8' // Indicates the content 
+               }
         };
       
-        fetch(`https://eazyrec.herokuapp.com/api/letter/${letterId}`, reqOptions).then(
+        fetch(`https://eazyrec.herokuapp.com/api/letter/2`, reqOptions).then(
             async (res) => {
                 let d = await res.json();
                 console.log(d);

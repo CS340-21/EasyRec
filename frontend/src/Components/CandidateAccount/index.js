@@ -84,7 +84,6 @@ function ResponsiveDrawer(props, userId) {
     .catch((res) => console.log(res));
   };
 
-  // TODO: THIS IS NOT WORKING YET
   const getServerSideProps = (id) => {
     axios.get(`https://eazyrec.herokuapp.com/api/user/${id}`)
       .then(res => res.data)
