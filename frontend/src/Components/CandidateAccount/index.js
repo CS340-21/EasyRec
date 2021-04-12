@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
@@ -11,6 +10,8 @@ import List from "@material-ui/core/List";
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import GroupWorkIcon from '@material-ui/icons/GroupWork';
 import SendIcon from '@material-ui/icons/Send';
 import ListIcon from '@material-ui/icons/ViewList';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -18,51 +19,81 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import RecList from '../RecList';
+import axios from "axios";
+import { TextField, Button } from '@material-ui/core';
+import { DropzoneArea } from 'material-ui-dropzone';
 
-const drawerWidth = 240;
+const drawerWidth = 175;
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-  },
-  appBar: {
-    [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth,
-    },
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      display: 'none',
-    },
-  },
-  // necessary for content to be below app bar
-  toolbar: theme.mixins.toolbar,
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-}));
-
-function ResponsiveDrawer(props) {
+function ResponsiveDrawer(props, userId) {
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mainContent, setMainContent] = React.useState("WrittenLetters");
+  const [user, setUser] = React.useState([]);
+  const [showCampaignList, setShowCampaignList] = React.useState("none");
+  const [values, setValues] = React.useState({
+    title: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    file: undefined,
+  });
+  userId = 5;
 
-  // Set main content to user home page default.
-  // options are 'Home', 'Letters', 'Request'
-  const [mainContent, setMainContent] = React.useState("Home");
+  const handleTextChange = (event) => {
+    setValues(values => ({ ...values, [event.target.id]: event.target.value }));
+  };
+
+  const handleRequestSubmitButton = () => {
+    if (values.firstName === "" || values.lastName === "" || values.email === "") {
+      alert("Please fill all required fields");
+    } else {
+      alert("Email is not set up yet but please check back soon");
+    }
+  }
+
+  const handleSubmitLetterUpload = () => {
+    if (values.title === "" || values.email === "" || !values.file) {
+      alert("Please fill all required fields");
+    } else {
+      uploadLetterToServer(user.id, values.email, values.file);
+    }
+  };
+
+  // TODO: THIS IS NOT WORKING YET
+  const uploadLetterToServer = (userid, recipEmail, letterFile) => {
+    const obj = {
+      author_id: userid,
+      email: recipEmail,
+    };
+    const json = JSON.stringify(obj);
+    const blob = new Blob([json], {
+      type: 'application/json'
+    });
+    const data = new FormData();
+    data.append("values", blob);
+    data.append("files", {"file": letterFile});
+    axios({
+      method: 'post',
+      url: "https://eazyrec.herokuapp.com/api/upload/",
+      data: data,
+    })
+    .then((res) => console.log(res))
+    .catch((res) => console.log(res));
+  };
+
+  const getServerSideProps = (id) => {
+    axios.get(`https://eazyrec.herokuapp.com/api/user/${id}`)
+      .then(res => res.data)
+      .then((data) => {
+        setUser(data);
+      })
+      .catch(res => console.log(res));
+  };
+  
+  getServerSideProps(userId);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -73,17 +104,25 @@ function ResponsiveDrawer(props) {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-          <ListItem button key="Home" onClick={() => setMainContent("Home")}>
+          <ListItem button key="WrittenLetters" onClick={() => setMainContent("WrittenLetters")}>
             <ListItemIcon><HomeIcon /></ListItemIcon>
-            <ListItemText primary="Home" />
+            <ListItemText primary="Written" />
           </ListItem>
-          <ListItem button key="Letters" onClick={() => setMainContent("Letters")}>
+          <ListItem button key="ReceivedLetters" onClick={() => setMainContent("ReceivedLetters")}>
             <ListItemIcon><ListIcon /></ListItemIcon>
-            <ListItemText primary="Letters" />
+            <ListItemText primary="Received" />
           </ListItem>
-          <ListItem button key="Request" onClick={() => setMainContent("Request")}>
+          <ListItem button key="RequestLetter" onClick={() => setMainContent("RequestLetter")}>
             <ListItemIcon><SendIcon /></ListItemIcon>
             <ListItemText primary="Request" />
+          </ListItem>
+          <ListItem button key="UploadLetter" onClick={() => setMainContent("UploadLetter")}>
+            <ListItemIcon><CloudUploadIcon /></ListItemIcon>
+            <ListItemText primary="Upload" />
+          </ListItem>
+          <ListItem button key="Campaigns" onClick={() => setMainContent("Campaigns")}>
+            <ListItemIcon><GroupWorkIcon /></ListItemIcon>
+            <ListItemText primary="Campaigns" />
           </ListItem>
       </List>
     </div>
@@ -107,17 +146,30 @@ function ResponsiveDrawer(props) {
           </IconButton>
             {(() => {
               switch (mainContent) {
-                case "Letters":
+
+                case "ReceivedLetters":
                   return (
-                    <Typography variant="h6" noWrap>Available Letters of Recommendation</Typography>
+                    <Typography variant="h6" noWrap>Received Letters of Recommendation</Typography>
                   );
-                case "Request":
+
+                case "RequestLetter":
                   return (
                     <Typography variant="h6" noWrap>Request Letter of Recommendation</Typography>
                   );
+                
+                case "UploadLetter":
+                  return (
+                    <Typography variant="h6" noWrap>Upload Letter of Recommendation</Typography>
+                  );
+
+                case "Campaigns":
+                  return (
+                    <Typography variant="h6" noWrap>Your Active Campaigns</Typography>
+                  );
+
                 default:
                   return (
-                    <Typography variant="h6" noWrap>Account Overview</Typography>
+                    <Typography variant="h6" noWrap>Written Letters of Recommendation</Typography>
                   );
               }
             })()}
@@ -159,39 +211,117 @@ function ResponsiveDrawer(props) {
         {(() => {
           switch (mainContent) {
 
-            case "Letters":
-              return ( <RecList /> );
+            case "ReceivedLetters":
+              return ( <RecList user={user} letterType="received" /> );
 
-            case "Request":
+            case "UploadLetter":
               return (
-                <Typography paragraph>
-                  This is request content!!  Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-                  facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-                  tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-                  consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-                  vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-                  hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-                  tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-                  nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-                  accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
-                </Typography>
+                <>
+                  <TextField
+                    style={{ marginTop: "40px", marginRight: "500px", width: "40%" }}
+                    id="title"
+                    label="Title"
+                    type="text"
+                    variant="outlined"
+                    required
+                    value={values.title}
+                    rowsMax={4}
+                    onChange={handleTextChange}
+                  />
+                  <TextField
+                    style={{ marginTop: "40px", marginBottom: "40px", width: "40%" }}
+                    id="email"
+                    label="Recipient Email"
+                    type="text"
+                    variant="outlined"
+                    required
+                    value={values.email}
+                    rowsMax={4}
+                    onChange={handleTextChange}
+                  />
+                  <DropzoneArea
+                    acceptedFiles={[".pdf"]}
+                    dropzoneText={"Drag and drop a pdf of the letter here or click to upload"}
+                    onChange={(upload) => {values.file = upload; }}
+                  />
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    className={classes.button}
+                    style={{ marginTop: "50px", padding: "20px" }}
+                    onClick={handleSubmitLetterUpload}
+                  >
+                    Submit Letter Upload
+                  </Button></>
               );
 
-            default: //this includes initial state: 'Home'
+            case "RequestLetter":
               return (
-                <Typography paragraph>
-                  This is account home content!!  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                  ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-                  facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-                  gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-                  donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-                  adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-                  Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-                  imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-                  arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-                  donec massa sapien faucibus et molestie ac.
-                </Typography>
+                <>
+                  <div className={classes.requestFormContainer}>
+                    <Typography paragraph>
+                      <TextField
+                        style={{ marginRight: "10px", marginBottom: "10px", width: "100px" }}
+                        id="title"
+                        label="Title"
+                        type="text"
+                        variant="outlined"
+                        value={values.title}
+                        rowsMax={4}
+                        onChange={handleTextChange}
+                      />
+                      <TextField
+                        style={{ marginRight: "10px", marginBottom: "10px" }}
+                        id="firstName"
+                        label="First Name"
+                        type="text"
+                        variant="outlined"
+                        required
+                        value={values.firstName}
+                        rowsMax={4}
+                        onChange={handleTextChange}
+                      />
+                      <TextField
+                        style={{ marginRight: "10px", marginBottom: "10px" }}
+                        id="lastName"
+                        label="Last Name"
+                        type="text"
+                        variant="outlined"
+                        required
+                        value={values.lastName}
+                        rowsMax={4}
+                        onChange={handleTextChange}
+                      />
+                      <TextField
+                        style={{ width: "300px" }}
+                        id="email"
+                        label="Email"
+                        type="text"
+                        variant="outlined"
+                        required
+                        value={values.email}
+                        rowsMax={4}
+                        onChange={handleTextChange}
+                      />
+                    </Typography>
+                  </div>
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    className={classes.button}
+                    style={{ marginTop: "30px", padding: "20px" }}
+                    onClick={handleRequestSubmitButton}
+                  >
+                    Send Request Email
+                  </Button>
+                </>
               );
+
+            case "Campaigns":
+              return ( <h1>Hi this is not done yet</h1> );
+
+            default: //this is the user's written letters
+              return ( <RecList user={user} letterType="written" /> );
           }
         })()}
       </main>
@@ -199,12 +329,50 @@ function ResponsiveDrawer(props) {
   );
 }
 
-ResponsiveDrawer.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window: PropTypes.func,
-};
-
 export default ResponsiveDrawer;
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+  },
+  drawer: {
+    [theme.breakpoints.up('sm')]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+  },
+  appBar: {
+    backgroundColor: "inherit",
+    color: "black",
+    [theme.breakpoints.up('sm')]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+    },
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
+  },
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
+  requestFormContainer: {
+    marginTop: "40px",
+  },
+  button: {
+    backgroundColor: "#343d52",
+    color: "white",
+    minWidth: "30%",
+    "&:hover": {
+      backgroundColor: "#5d6475"
+    },
+  },
+}));
