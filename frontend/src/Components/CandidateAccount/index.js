@@ -20,6 +20,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import RecList from '../RecList';
 import axios from "axios";
 import { TextField, Button } from '@material-ui/core';
+import { DropzoneArea } from 'material-ui-dropzone';
 
 const drawerWidth = 175;
 
@@ -28,44 +29,73 @@ function ResponsiveDrawer(props, userId) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mainContent, setMainContent] = React.useState("WrittenLetters");
+  const [user, setUser] = React.useState([]);
   const [values, setValues] = React.useState({
     title: "",
     firstName: "",
     lastName: "",
     email: "",
+    file: undefined,
   });
+  userId = 5;
 
   const handleTextChange = (event) => {
     setValues(values => ({ ...values, [event.target.id]: event.target.value }));
   };
 
   const handleRequestSubmitButton = () => {
-    if (values.firstName === "" || 
-        values.lastName === "" ||
-        values.email === "") {
+    if (values.firstName === "" || values.lastName === "" || values.email === "") {
       alert("Please fill all required fields");
     } else {
       alert("Email is not set up yet but please check back soon");
     }
   }
 
-  const getServerSideProps = async (id) => {
-    try {
-      const res = await axios.get(`https://eazyrec.herokuapp.com/api/user/${id}`)
-      return res.data;
-    } catch (error) {
-      console.log(error);
+  const handleSubmitLetterUpload = () => {
+    if (values.title === "" || values.email === "" || !values.file) {
+      alert("Please fill all required fields");
+    } else {
+      uploadLetterToServer(user.id, values.email, values.file);
     }
   };
 
-  userId = 1;
+  // TODO: THIS IS NOT WORKING YET
+  const uploadLetterToServer = (userid, recipEmail, letterFile) => {
+    const obj = {
+      author_id: userid,
+      email: recipEmail,
+    };
+    const json = JSON.stringify(obj);
+    const blob = new Blob([json], {
+      type: 'application/json'
+    });
+    const data = new FormData();
+    data.append("values", blob);
+    data.append("files", {"file": letterFile});
+    axios({
+      method: 'post',
+      url: "https://eazyrec.herokuapp.com/api/upload/",
+      data: data,
+    })
+    .then((res) => console.log(res))
+    .catch((res) => console.log(res));
+  };
 
-  const user = getServerSideProps(userId);
+  // TODO: THIS IS NOT WORKING YET
+  const getServerSideProps = (id) => {
+    axios.get(`https://eazyrec.herokuapp.com/api/user/${id}`)
+      .then(res => res.data)
+      .then((data) => {
+        setUser(data);
+      })
+      .catch(res => console.log(res));
+  };
+
+
+
+  getServerSideProps(userId);
   console.log(user);
-
-  // Set main content to user home page default.
-  // options are 'Home', 'Letters', 'Request'
-  const [mainContent, setMainContent] = React.useState("Home");
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -114,18 +144,22 @@ function ResponsiveDrawer(props, userId) {
           </IconButton>
             {(() => {
               switch (mainContent) {
+
                 case "ReceivedLetters":
                   return (
                     <Typography variant="h6" noWrap>Received Letters of Recommendation</Typography>
                   );
+
                 case "RequestLetter":
                   return (
                     <Typography variant="h6" noWrap>Request Letter of Recommendation</Typography>
                   );
+                
                 case "UploadLetter":
                   return (
-                    <Typography variant="h6" noWrap>Upload a Letter of Recommendation</Typography>
-                  )
+                    <Typography variant="h6" noWrap>Upload Letter of Recommendation</Typography>
+                  );
+
                 default:
                   return (
                     <Typography variant="h6" noWrap>Written Letters of Recommendation</Typography>
@@ -175,8 +209,44 @@ function ResponsiveDrawer(props, userId) {
 
             case "UploadLetter":
               return (
-                <h4>File Dropzone Will Go Here</h4>
-              )
+                <>
+                  <TextField
+                    style={{ marginTop: "40px", marginRight: "500px", width: "40%" }}
+                    id="title"
+                    label="Title"
+                    type="text"
+                    variant="outlined"
+                    required
+                    value={values.title}
+                    rowsMax={4}
+                    onChange={handleTextChange}
+                  />
+                  <TextField
+                    style={{ marginTop: "40px", marginBottom: "40px", width: "40%" }}
+                    id="email"
+                    label="Recipient Email"
+                    type="text"
+                    variant="outlined"
+                    required
+                    value={values.email}
+                    rowsMax={4}
+                    onChange={handleTextChange}
+                  />
+                  <DropzoneArea
+                    acceptedFiles={[".pdf"]}
+                    dropzoneText={"Drag and drop a pdf of the letter here or click to upload"}
+                    onChange={(upload) => {values.file = upload; }}
+                  />
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    className={classes.button}
+                    style={{ marginTop: "50px", padding: "20px" }}
+                    onClick={handleSubmitLetterUpload}
+                  >
+                    Submit Letter Upload
+                  </Button></>
+              );
 
             case "RequestLetter":
               return (
@@ -184,7 +254,7 @@ function ResponsiveDrawer(props, userId) {
                   <div className={classes.requestFormContainer}>
                     <Typography paragraph>
                       <TextField
-                        style={{ margin: "10px" }}
+                        style={{ marginRight: "10px", marginBottom: "10px", width: "100px" }}
                         id="title"
                         label="Title"
                         type="text"
@@ -194,7 +264,7 @@ function ResponsiveDrawer(props, userId) {
                         onChange={handleTextChange}
                       />
                       <TextField
-                        style={{ margin: "10px" }}
+                        style={{ marginRight: "10px", marginBottom: "10px" }}
                         id="firstName"
                         label="First Name"
                         type="text"
@@ -205,7 +275,7 @@ function ResponsiveDrawer(props, userId) {
                         onChange={handleTextChange}
                       />
                       <TextField
-                        style={{ margin: "10px" }}
+                        style={{ marginRight: "10px", marginBottom: "10px" }}
                         id="lastName"
                         label="Last Name"
                         type="text"
@@ -216,7 +286,7 @@ function ResponsiveDrawer(props, userId) {
                         onChange={handleTextChange}
                       />
                       <TextField
-                        style={{ margin: "10px" }}
+                        style={{ width: "300px" }}
                         id="email"
                         label="Email"
                         type="text"
@@ -232,7 +302,7 @@ function ResponsiveDrawer(props, userId) {
                     variant="contained"
                     type="submit"
                     className={classes.button}
-                    style={{ marginTop: "40px", marginLeft: "150px" }}
+                    style={{ marginTop: "30px", padding: "20px" }}
                     onClick={handleRequestSubmitButton}
                   >
                     Send Request Email
@@ -285,12 +355,12 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   requestFormContainer: {
-    margin: "10px",
+    marginTop: "40px",
   },
   button: {
     backgroundColor: "#343d52",
     color: "white",
-    minWidth: "150px",
+    minWidth: "30%",
     "&:hover": {
       backgroundColor: "#5d6475"
     },

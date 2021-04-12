@@ -64,11 +64,7 @@ export default function RecList({ user, letterType }) {
                                     {letter.title}
                                 </TableCell>
                                 <TableCell align="center">
-                                    {letter.pub_date.toLocaleDateString("en-us", {
-                                        month: "2-digit",
-                                        day: "2-digit",
-                                        year: "numeric",
-                                    })}
+                                    {letter.pub_date.split('T')[0]}
                                 </TableCell>
                                 <TableCell align="center">
                                     <button className={classes.iconButton}>
