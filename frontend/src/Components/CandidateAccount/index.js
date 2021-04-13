@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
@@ -25,15 +25,14 @@ import { DropzoneArea } from 'material-ui-dropzone';
 
 const drawerWidth = 175;
 
-function ResponsiveDrawer(props, userId) {
+const ResponsiveDrawer = (props, userId) => {
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [mainContent, setMainContent] = React.useState("WrittenLetters");
-  const [user, setUser] = React.useState([]);
-  const [showCampaignList, setShowCampaignList] = React.useState("none");
-  const [values, setValues] = React.useState({
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mainContent, setMainContent] = useState("WrittenLetters");
+  const [user, setUser] = useState([]);
+  const [values, setValues] = useState({
     title: "",
     firstName: "",
     lastName: "",
@@ -42,6 +41,20 @@ function ResponsiveDrawer(props, userId) {
   });
   userId = 5;
 
+  /* Get User info from database */
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const res = await axios.get(`https://eazyrec.herokuapp.com/api/user/${userId}`);
+        setUser(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUser();
+  }, [userId]);
+   
+  /* Functions to handle input and button clicks */
   const handleTextChange = (event) => {
     setValues(values => ({ ...values, [event.target.id]: event.target.value }));
   };
@@ -83,17 +96,6 @@ function ResponsiveDrawer(props, userId) {
     .then((res) => console.log(res))
     .catch((res) => console.log(res));
   };
-
-  const getServerSideProps = (id) => {
-    axios.get(`https://eazyrec.herokuapp.com/api/user/${id}`)
-      .then(res => res.data)
-      .then((data) => {
-        setUser(data);
-      })
-      .catch(res => console.log(res));
-  };
-  
-  getServerSideProps(userId);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
