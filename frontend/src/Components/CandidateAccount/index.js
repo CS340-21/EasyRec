@@ -41,12 +41,6 @@ const ResponsiveDrawer = (props, userId) => {
   });
   userId = 5;
 
-  function getUser(id) {
-    fetch(`https://eazyrec.herokuapp.com/api/user/${id}`)
-      .then(res => res.json())
-      .catch(res => console.log(res));
-  }
-
   /* Get User info from database */
   useEffect(() => {
     const getUser = async () => {

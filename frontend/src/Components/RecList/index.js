@@ -54,6 +54,7 @@ export default function RecList({ user, letterType }) {
         };
 
         deleteLetter();
+        window.location.reload();
     };
 
     const popoverOpen = Boolean(anchorEl);
