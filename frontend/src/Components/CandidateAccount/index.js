@@ -25,7 +25,7 @@ import { DropzoneArea } from 'material-ui-dropzone';
 
 const drawerWidth = 175;
 
-function ResponsiveDrawer(props, userId) {
+const ResponsiveDrawer = (props, userId) => {
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();

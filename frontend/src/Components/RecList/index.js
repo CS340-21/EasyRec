@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -12,13 +12,12 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import Popover from '@material-ui/core/Popover';
 import { TextField } from "@material-ui/core";
-import axios from "axios";
 
 // create attended events table for current volunteer
 export default function RecList({ user, letterType }) {
     const classes = useStyles();
-    const [recipientCode, setRecipientCode] = React.useState("");
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [recipientCode, setRecipientCode] = useState("");
+    const [anchorEl, setAnchorEl] = useState(null);
 
     const handleLetterSend = () => {
         alert("Letter sending is not yet set up");
@@ -36,31 +35,30 @@ export default function RecList({ user, letterType }) {
         setRecipientCode(event.target.value);
     }
 
-    const handleLetterDelete = (event) => {
-        deleteLetter(event.target.id)
-    }
-
-    // TODO: This does not work correctly
-    const deleteLetter = (letterId) => {
-        const reqOptions = {
-            method: "delete",
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8' // Indicates the content 
-               }
+    /* Delete letter with id: letterId from the database */
+    const handleLetterDelete = (letterId) => {
+        const deleteLetter = () => {
+            const reqOptions = {
+                method: "delete",
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8' // Indicates the content 
+                }
+            };
+        
+            fetch(`https://eazyrec.herokuapp.com/api/letter/${letterId}`, reqOptions).then(
+                async (res) => {
+                    let d = await res;
+                    console.log(d);
+                }
+            );
         };
-      
-        fetch(`https://eazyrec.herokuapp.com/api/letter/2`, reqOptions).then(
-            async (res) => {
-                let d = await res.json();
-                console.log(d);
-            }
-        );
-    }
+
+        deleteLetter();
+    };
 
     const popoverOpen = Boolean(anchorEl);
     const popoverId = popoverOpen ? "simple-popover" : undefined;
 
-    //Uncomment to use actual volunteer data for volId from server
     let letters;
     if (letterType === "written") {
         letters = user.written ? user.written : [];
@@ -74,7 +72,7 @@ export default function RecList({ user, letterType }) {
                 <TableBody>
                     {letters.length > 0 &&
                         letters.map(letter => (
-                            <TableRow key={letter.title}>
+                            <TableRow key={letter.id}>
                                 <TableCell component="th" scope="row">
                                     {letter.author}
                                 </TableCell>
@@ -99,12 +97,12 @@ export default function RecList({ user, letterType }) {
                                         anchorEl={anchorEl}
                                         onClose={handlePopoverClose}
                                         anchorOrigin={{
-                                        vertical: 'center',
-                                        horizontal: 'center',
+                                            vertical: 'center',
+                                            horizontal: 'center',
                                         }}
                                         transformOrigin={{
-                                        vertical: 'center',
-                                        horizontal: 'center',
+                                            vertical: 'center',
+                                            horizontal: 'center',
                                         }}
                                     >
                                         <TextField
@@ -125,7 +123,9 @@ export default function RecList({ user, letterType }) {
                                 </TableCell>
                                 <TableCell>
                                     <button className={classes.iconButton}>
-                                        <DeleteIcon id={letter.id} onClick={handleLetterDelete} />
+                                        <DeleteIcon onClick={() => {
+                                            handleLetterDelete(letter.id);
+                                        }} />
                                     </button>
                                 </TableCell>
                             </TableRow>
