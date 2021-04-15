@@ -48,7 +48,6 @@ export class LoginForm extends Component {
     console.log(d);
     if (res.status === 200) {
       this.setState({ loggedIn: true, userId: d.user_id });
-      // alert("success");
     } else if (res.status === 400) {
       alert("Error signing in");
     }
@@ -60,7 +59,11 @@ export class LoginForm extends Component {
     const { username, usernameError, pw, passwordError } = this.state;
 
     if (this.state.loggedIn) {
-      return <Redirect to="./genericcandidateaccount" />;
+      return (
+        // <Router path="./genericcandidateaccount">
+        <Redirect from="./login" to="./genericcandidateaccount" />
+        // </Router>
+      );
     }
     return (
       <>
