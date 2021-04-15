@@ -1,6 +1,10 @@
 import React, { Component, useEffect, useState } from "react";
 import { TextField, Button } from "@material-ui/core";
+import { Router, Redirect } from "react-router-dom";
+import { createBrowserHistory } from "history";
 import "./index.css";
+
+const history = createBrowserHistory();
 
 export class LoginForm extends Component {
   constructor(props) {
@@ -10,6 +14,8 @@ export class LoginForm extends Component {
       usernameError: false,
       pw: "",
       passwordError: false,
+      loggedIn: false,
+      userId: -1,
     };
 
     this.updateFieldState = this.updateFieldState.bind(this);
@@ -41,15 +47,21 @@ export class LoginForm extends Component {
     const d = await res.json();
     console.log(d);
     if (res.status === 200) {
-      alert("success");
+      this.setState({ loggedIn: true, userId: d.user_id });
+      // alert("success");
     } else if (res.status === 400) {
       alert("Error signing in");
     }
 
     e.preventDefault();
   }
+
   render() {
     const { username, usernameError, pw, passwordError } = this.state;
+
+    if (this.state.loggedIn) {
+      return <Redirect to="./genericcandidateaccount" />;
+    }
     return (
       <>
         <div className="formContainer">

@@ -5,6 +5,7 @@ import { LoginForm } from "./../LoginForm";
 import { SignUpForm } from "./../SignUpForm";
 import { Templates } from "../Templates";
 import { FAQ } from "../FAQ";
+import ResponsiveDrawer from "../CandidateAccount";
 
 const HomePage = () => {
   return (
@@ -16,6 +17,11 @@ const HomePage = () => {
           <Route exact path="/signup" component={SignUpForm} />
           <Route exact path="/faq" component={FAQ} />
           <Route exact path="/templates" component={Templates} />
+          <Route
+            exact
+            path="./genericcandidateaccount"
+            component={ResponsiveDrawer}
+          ></Route>
         </Switch>
       </Router>
     </>

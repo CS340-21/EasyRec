@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
-import IconButton from '@material-ui/core/IconButton';
-import HomeIcon from '@material-ui/icons/Home';
+import React, { useState, useEffect } from "react";
+import AppBar from "@material-ui/core/AppBar";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Divider from "@material-ui/core/Divider";
+import Drawer from "@material-ui/core/Drawer";
+import Hidden from "@material-ui/core/Hidden";
+import IconButton from "@material-ui/core/IconButton";
+import HomeIcon from "@material-ui/icons/Home";
 import List from "@material-ui/core/List";
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import GroupWorkIcon from '@material-ui/icons/GroupWork';
-import SendIcon from '@material-ui/icons/Send';
-import ListIcon from '@material-ui/icons/ViewList';
-import MenuIcon from '@material-ui/icons/Menu';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import RecList from '../RecList';
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import GroupWorkIcon from "@material-ui/icons/GroupWork";
+import SendIcon from "@material-ui/icons/Send";
+import ListIcon from "@material-ui/icons/ViewList";
+import MenuIcon from "@material-ui/icons/Menu";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import RecList from "../RecList";
 import axios from "axios";
-import { TextField, Button } from '@material-ui/core';
-import { DropzoneArea } from 'material-ui-dropzone';
+import { TextField, Button } from "@material-ui/core";
+import { DropzoneArea } from "material-ui-dropzone";
 
 const drawerWidth = 175;
 
@@ -45,7 +45,9 @@ const ResponsiveDrawer = (props, userId) => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const res = await axios.get(`https://eazyrec.herokuapp.com/api/user/${userId}`);
+        const res = await axios.get(
+          `https://eazyrec.herokuapp.com/api/user/${userId}`
+        );
         setUser(res.data);
       } catch (error) {
         console.log(error);
@@ -53,19 +55,26 @@ const ResponsiveDrawer = (props, userId) => {
     };
     getUser();
   }, [userId]);
-   
+
   /* Functions to handle input and button clicks */
   const handleTextChange = (event) => {
-    setValues(values => ({ ...values, [event.target.id]: event.target.value }));
+    setValues((values) => ({
+      ...values,
+      [event.target.id]: event.target.value,
+    }));
   };
 
   const handleRequestSubmitButton = () => {
-    if (values.firstName === "" || values.lastName === "" || values.email === "") {
+    if (
+      values.firstName === "" ||
+      values.lastName === "" ||
+      values.email === ""
+    ) {
       alert("Please fill all required fields");
     } else {
       alert("Email is not set up yet but please check back soon");
     }
-  }
+  };
 
   const handleSubmitLetterUpload = () => {
     if (values.title === "" || values.email === "" || !values.file) {
@@ -83,18 +92,18 @@ const ResponsiveDrawer = (props, userId) => {
     };
     const json = JSON.stringify(obj);
     const blob = new Blob([json], {
-      type: 'application/json'
+      type: "application/json",
     });
     const data = new FormData();
     data.append("values", blob);
-    data.append("files", {"file": letterFile});
+    data.append("files", { file: letterFile });
     axios({
-      method: 'post',
+      method: "post",
       url: "https://eazyrec.herokuapp.com/api/upload/",
       data: data,
     })
-    .then((res) => console.log(res))
-    .catch((res) => console.log(res));
+      .then((res) => console.log(res))
+      .catch((res) => console.log(res));
   };
 
   const handleDrawerToggle = () => {
@@ -106,31 +115,62 @@ const ResponsiveDrawer = (props, userId) => {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-          <ListItem button key="WrittenLetters" onClick={() => setMainContent("WrittenLetters")}>
-            <ListItemIcon><HomeIcon /></ListItemIcon>
-            <ListItemText primary="Written" />
-          </ListItem>
-          <ListItem button key="ReceivedLetters" onClick={() => setMainContent("ReceivedLetters")}>
-            <ListItemIcon><ListIcon /></ListItemIcon>
-            <ListItemText primary="Received" />
-          </ListItem>
-          <ListItem button key="RequestLetter" onClick={() => setMainContent("RequestLetter")}>
-            <ListItemIcon><SendIcon /></ListItemIcon>
-            <ListItemText primary="Request" />
-          </ListItem>
-          <ListItem button key="UploadLetter" onClick={() => setMainContent("UploadLetter")}>
-            <ListItemIcon><CloudUploadIcon /></ListItemIcon>
-            <ListItemText primary="Upload" />
-          </ListItem>
-          <ListItem button key="Campaigns" onClick={() => setMainContent("Campaigns")}>
-            <ListItemIcon><GroupWorkIcon /></ListItemIcon>
-            <ListItemText primary="Campaigns" />
-          </ListItem>
+        <ListItem
+          button
+          key="WrittenLetters"
+          onClick={() => setMainContent("WrittenLetters")}
+        >
+          <ListItemIcon>
+            <HomeIcon />
+          </ListItemIcon>
+          <ListItemText primary="Written" />
+        </ListItem>
+        <ListItem
+          button
+          key="ReceivedLetters"
+          onClick={() => setMainContent("ReceivedLetters")}
+        >
+          <ListItemIcon>
+            <ListIcon />
+          </ListItemIcon>
+          <ListItemText primary="Received" />
+        </ListItem>
+        <ListItem
+          button
+          key="RequestLetter"
+          onClick={() => setMainContent("RequestLetter")}
+        >
+          <ListItemIcon>
+            <SendIcon />
+          </ListItemIcon>
+          <ListItemText primary="Request" />
+        </ListItem>
+        <ListItem
+          button
+          key="UploadLetter"
+          onClick={() => setMainContent("UploadLetter")}
+        >
+          <ListItemIcon>
+            <CloudUploadIcon />
+          </ListItemIcon>
+          <ListItemText primary="Upload" />
+        </ListItem>
+        <ListItem
+          button
+          key="Campaigns"
+          onClick={() => setMainContent("Campaigns")}
+        >
+          <ListItemIcon>
+            <GroupWorkIcon />
+          </ListItemIcon>
+          <ListItemText primary="Campaigns" />
+        </ListItem>
       </List>
     </div>
   );
 
-  const container = window !== undefined ? () => window().document.body : undefined;
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
 
   return (
     <div className={classes.root}>
@@ -146,35 +186,44 @@ const ResponsiveDrawer = (props, userId) => {
           >
             <MenuIcon />
           </IconButton>
-            {(() => {
-              switch (mainContent) {
+          {(() => {
+            switch (mainContent) {
+              case "ReceivedLetters":
+                return (
+                  <Typography variant="h6" noWrap>
+                    Received Letters of Recommendation
+                  </Typography>
+                );
 
-                case "ReceivedLetters":
-                  return (
-                    <Typography variant="h6" noWrap>Received Letters of Recommendation</Typography>
-                  );
+              case "RequestLetter":
+                return (
+                  <Typography variant="h6" noWrap>
+                    Request Letter of Recommendation
+                  </Typography>
+                );
 
-                case "RequestLetter":
-                  return (
-                    <Typography variant="h6" noWrap>Request Letter of Recommendation</Typography>
-                  );
-                
-                case "UploadLetter":
-                  return (
-                    <Typography variant="h6" noWrap>Upload Letter of Recommendation</Typography>
-                  );
+              case "UploadLetter":
+                return (
+                  <Typography variant="h6" noWrap>
+                    Upload Letter of Recommendation
+                  </Typography>
+                );
 
-                case "Campaigns":
-                  return (
-                    <Typography variant="h6" noWrap>Your Active Campaigns</Typography>
-                  );
+              case "Campaigns":
+                return (
+                  <Typography variant="h6" noWrap>
+                    Your Active Campaigns
+                  </Typography>
+                );
 
-                default:
-                  return (
-                    <Typography variant="h6" noWrap>Written Letters of Recommendation</Typography>
-                  );
-              }
-            })()}
+              default:
+                return (
+                  <Typography variant="h6" noWrap>
+                    Written Letters of Recommendation
+                  </Typography>
+                );
+            }
+          })()}
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">
@@ -183,7 +232,7 @@ const ResponsiveDrawer = (props, userId) => {
           <Drawer
             container={container}
             variant="temporary"
-            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+            anchor={theme.direction === "rtl" ? "right" : "left"}
             open={mobileOpen}
             onClose={handleDrawerToggle}
             classes={{
@@ -212,15 +261,18 @@ const ResponsiveDrawer = (props, userId) => {
         <div className={classes.toolbar} />
         {(() => {
           switch (mainContent) {
-
             case "ReceivedLetters":
-              return ( <RecList user={user} letterType="received" /> );
+              return <RecList user={user} letterType="received" />;
 
             case "UploadLetter":
               return (
                 <>
                   <TextField
-                    style={{ marginTop: "40px", marginRight: "500px", width: "40%" }}
+                    style={{
+                      marginTop: "40px",
+                      marginRight: "500px",
+                      width: "40%",
+                    }}
                     id="title"
                     label="Title"
                     type="text"
@@ -231,7 +283,11 @@ const ResponsiveDrawer = (props, userId) => {
                     onChange={handleTextChange}
                   />
                   <TextField
-                    style={{ marginTop: "40px", marginBottom: "40px", width: "40%" }}
+                    style={{
+                      marginTop: "40px",
+                      marginBottom: "40px",
+                      width: "40%",
+                    }}
                     id="email"
                     label="Recipient Email"
                     type="text"
@@ -243,8 +299,12 @@ const ResponsiveDrawer = (props, userId) => {
                   />
                   <DropzoneArea
                     acceptedFiles={[".pdf"]}
-                    dropzoneText={"Drag and drop a pdf of the letter here or click to upload"}
-                    onChange={(upload) => {values.file = upload; }}
+                    dropzoneText={
+                      "Drag and drop a pdf of the letter here or click to upload"
+                    }
+                    onChange={(upload) => {
+                      values.file = upload;
+                    }}
                   />
                   <Button
                     variant="contained"
@@ -254,7 +314,8 @@ const ResponsiveDrawer = (props, userId) => {
                     onClick={handleSubmitLetterUpload}
                   >
                     Submit Letter Upload
-                  </Button></>
+                  </Button>
+                </>
               );
 
             case "RequestLetter":
@@ -263,7 +324,11 @@ const ResponsiveDrawer = (props, userId) => {
                   <div className={classes.requestFormContainer}>
                     <Typography paragraph>
                       <TextField
-                        style={{ marginRight: "10px", marginBottom: "10px", width: "100px" }}
+                        style={{
+                          marginRight: "10px",
+                          marginBottom: "10px",
+                          width: "100px",
+                        }}
                         id="title"
                         label="Title"
                         type="text"
@@ -320,25 +385,24 @@ const ResponsiveDrawer = (props, userId) => {
               );
 
             case "Campaigns":
-              return ( <h1>Hi this is not done yet</h1> );
+              return <h1>Hi this is not done yet</h1>;
 
-            default: //this is the user's written letters
-              return ( <RecList user={user} letterType="written" /> );
+            default:
+              //this is the user's written letters
+              return <RecList user={user} letterType="written" />;
           }
         })()}
       </main>
     </div>
   );
-}
-
-export default ResponsiveDrawer;
+};
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: "flex",
   },
   drawer: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       width: drawerWidth,
       flexShrink: 0,
     },
@@ -346,15 +410,15 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     backgroundColor: "inherit",
     color: "black",
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,
     },
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      display: 'none',
+    [theme.breakpoints.up("sm")]: {
+      display: "none",
     },
   },
   // necessary for content to be below app bar
@@ -374,7 +438,9 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     minWidth: "30%",
     "&:hover": {
-      backgroundColor: "#5d6475"
+      backgroundColor: "#5d6475",
     },
   },
 }));
+
+export default ResponsiveDrawer;
