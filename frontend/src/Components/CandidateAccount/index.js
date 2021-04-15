@@ -39,7 +39,7 @@ const ResponsiveDrawer = (props, userId) => {
     email: "",
     file: undefined,
   });
-  userId = 5;
+  userId = 10;
 
   /* Get User info from database */
   useEffect(() => {
@@ -90,13 +90,18 @@ const ResponsiveDrawer = (props, userId) => {
       author_id: userid,
       email: recipEmail,
     };
+    console.log(typeof letterFile[0]);
+    console.log(letterFile);
     const json = JSON.stringify(obj);
-    const blob = new Blob([json], {
-      type: "application/json",
-    });
+
+    // const blob = new Blob([json], {
+    //   type: "application/json",
+    // });
+    // console.log(blob);
     const data = new FormData();
-    data.append("values", blob);
+    data.append("values", json);
     data.append("files", { file: letterFile });
+    // console.log(data);
     axios({
       method: "post",
       url: "https://eazyrec.herokuapp.com/api/upload/",
@@ -302,6 +307,7 @@ const ResponsiveDrawer = (props, userId) => {
                     dropzoneText={
                       "Drag and drop a pdf of the letter here or click to upload"
                     }
+                    showFileNames
                     onChange={(upload) => {
                       values.file = upload;
                     }}
