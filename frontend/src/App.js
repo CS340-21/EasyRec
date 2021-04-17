@@ -30,7 +30,9 @@ function App() {
               <HomePage />
             </div>
           </Route>
-          <Route exact path="/genericCandidateAccount" component={CandidateAccount} />
+          <Route path="/candidateaccount/:id">
+            <CandidateAccount />
+          </Route>
         </Switch>
         
       </Router>
