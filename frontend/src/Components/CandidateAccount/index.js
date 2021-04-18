@@ -22,7 +22,6 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import RecList from "../RecList";
 import axios from "axios";
 import { TextField, Button } from "@material-ui/core";
-import { DropzoneArea } from "material-ui-dropzone";
 
 const drawerWidth = 175;
 
@@ -299,16 +298,6 @@ const CandidateAccount = (props) => {
                     className={classes.inputButton}
                     style={{ padding: "15px" }} 
                   />
-                  {/*<DropzoneArea
-                    acceptedFiles={[".pdf"]}
-                    dropzoneText={
-                      "Drag and drop a pdf of the letter here or click to upload"
-                    }
-                    showFileNames
-                    onChange={(upload) => {
-                      values.file = upload;
-                    }}
-                  />*/}
                   <Button
                     variant="contained"
                     type="submit"
