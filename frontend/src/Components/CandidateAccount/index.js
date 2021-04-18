@@ -98,6 +98,7 @@ const ResponsiveDrawer = (props, userId) => {
     //   type: "application/json",
     // });
     // console.log(blob);
+    
     const data = new FormData();
     data.append("values", json);
     data.append("files", { file: letterFile });
