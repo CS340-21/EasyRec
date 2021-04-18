@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
@@ -25,7 +26,7 @@ import { DropzoneArea } from "material-ui-dropzone";
 
 const drawerWidth = 175;
 
-const ResponsiveDrawer = (props, userId) => {
+const CandidateAccount = (props) => {
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
@@ -39,7 +40,9 @@ const ResponsiveDrawer = (props, userId) => {
     email: "",
     file: undefined,
   });
-  userId = 10;
+  let params = useParams();
+  const userId = params.id.toString().split(':')[1];
+  console.log(userId);
 
   /* Get User info from database */
   useEffect(() => {
@@ -450,4 +453,4 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default ResponsiveDrawer;
+export default CandidateAccount;
