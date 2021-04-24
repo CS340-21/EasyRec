@@ -13,7 +13,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
-from .serializers import UserSerializer, RegisterSerializer
+from .serializers import UserSerializer, RegisterSerializer, UserCampaigns
 from .models import CustomUser
 
 class UserView(APIView):
@@ -42,10 +42,14 @@ class UserView(APIView):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class CampaignsView(generics.CreateAPIView):
+    serializer = UserCampaigns
 
+    def get_queryset(self):
+        queryset = CustomUser.objects.filter(pk=self.kwargs['user_id'])
+    
 class RegisterView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
-    #permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
     
 
