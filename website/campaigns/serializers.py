@@ -14,9 +14,9 @@ class CampaignInfo(serializers.ModelSerializer):
 
     class Meta:
         model = Campaign
-        fields = ('name', 'camp_id')
+        fields = ('id', 'name', 'camp_id')
 
-class CampaignLetters(serializers.ModelSerializer):
+class CampLetters(serializers.ModelSerializer):
     my_campaigns = LetterSerializer(many=True, read_only=True)
 
     class Meta:

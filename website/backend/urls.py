@@ -21,6 +21,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 from letters import views as letter_views
 from users import views as user_views
+from campaigns import views as campaign_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,6 +29,8 @@ urlpatterns = [
     path('api/user/<int:pk>', user_views.UserView.as_view()),
     path('api/token-auth/', user_views.CustomAuthToken.as_view()),
     path('api/campaigns/', user_views.CampaignsView.as_view()),
+    path('api/add-campaign/', letter_views.AddCampaign.as_view()),
+    path('api/campaign-letters/', campaign_views.CampaignLetters.as_view()),
     path('api/upload/', letter_views.RegisterView.as_view()),
     path('api/letter/<int:pk>', letter_views.LetterView.as_view()),
 ]
