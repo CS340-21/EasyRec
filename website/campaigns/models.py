@@ -10,11 +10,12 @@ from users.models import CustomUser
 #    letter = models.ForeignKey(Letter, on_delete=models.CASCADE, related_name="source")
 #    campaign = models.ForeignKey()
 
+def get_camp_id():
+    return str(uuid4().hex)[:16]
+
 class Campaign(models.Model):
     name = models.CharField(max_length=200)
-    #camp_id = models.CharField(max_length=200)
-    camp_id = models.CharField(max_length=16, blank=True, unique=True,
-                               default=str(uuid4().hex)[:16])
+    camp_id = models.CharField(max_length=16, blank=True, default=get_camp_id)
 
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='owner')
 
