@@ -16,15 +16,12 @@ class Letter(models.Model):
     title = models.CharField(max_length=200)
     permissions = models.IntegerField(default=0)
 
-    campaigns = models.ManyToManyField(Campaign, blank=True)
+    campaigns = models.ManyToManyField(Campaign, blank=True, related_name='my_campaigns')
     
     def get_file_path(instance, filename):
         ext = filename.split('.')[-1]
         filename = "%s.%s" % (uuid.uuid4(), ext)
         return os.path.join('', filename)
-
-    #file_doc = models.FileField(upload_to=get_file_path, null=True, blank=True,
-    #                            validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
 
     file_doc = models.FileField(upload_to=get_file_path, null=True, blank=True)
     

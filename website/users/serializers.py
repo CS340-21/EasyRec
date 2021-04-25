@@ -4,6 +4,7 @@ from rest_framework.validators import UniqueValidator
 from .models import CustomUser
 from letters.models import Letter
 from letters.serializers import LetterSerializer
+from campaigns.serializers import CampaignInfo
 
 class OrganizationSerializer(serializers.ModelSerializer):
 
@@ -21,6 +22,15 @@ class UserSerializer(serializers.ModelSerializer):
         model = CustomUser
 
         fields = ['id', 'email', 'first_name', 'last_name', 'organization', 'written', 'received']
+
+class UserCampaigns(serializers.ModelSerializer):
+    owner = CampaignInfo(many=True, read_only=True)
+    
+    class Meta:
+        model = CustomUser
+
+        fields = ['owner']
+
 
 
 class RegisterSerializer(serializers.ModelSerializer):
