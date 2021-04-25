@@ -60,7 +60,7 @@ class AddCampaign(APIView):
         try:
             camp = Campaign.objects.get(camp_id=request.data['camp_id'])
         except:
-            return Response({"Error": "No campaign with that id"},
+            return Response({"Error": "No campaign with id {0}".format(request.data['camp_id'])},
                             status=status.HTTP_417_EXPECTATION_FAILED)
 
         letter.campaigns.add(camp)
