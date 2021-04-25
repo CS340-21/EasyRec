@@ -14,6 +14,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
 from .serializers import UserSerializer, RegisterSerializer, UserCampaigns
+from campaigns.serializers import NewCampaign
 from .models import CustomUser
 
 class UserView(APIView):
@@ -42,11 +43,24 @@ class UserView(APIView):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class CampaignsView(generics.CreateAPIView):
-    serializer = UserCampaigns
+class CampaignsView(APIView):
+    def get_user(self, pk):
+        try:
+            return CustomUser.objects.get(pk=pk)
+        except CustomUser.DoesNotExist:
+            raise Http404
 
-    def get_queryset(self):
-        queryset = CustomUser.objects.filter(pk=self.kwargs['user_id'])
+    def get(self, request, format=None):        
+        snippet = self.get_user(int(request.data['user_id']))
+        serializer = UserCampaigns(snippet)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = NewCampaign(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class RegisterView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()

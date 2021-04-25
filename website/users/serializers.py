@@ -25,11 +25,13 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserCampaigns(serializers.ModelSerializer):
     owner = CampaignInfo(many=True, read_only=True)
-
+    
     class Meta:
         model = CustomUser
 
         fields = ['owner']
+
+
 
 class RegisterSerializer(serializers.ModelSerializer):
 

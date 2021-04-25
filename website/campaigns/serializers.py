@@ -4,6 +4,12 @@ from letters.serializers import LetterSerializer
 from campaigns.models import Campaign
 from letters.models import Letter
 
+class NewCampaign(serializers.ModelSerializer):
+
+    class Meta:
+        model = Campaign
+        fields = ('name', 'owner')
+
 class CampaignInfo(serializers.ModelSerializer):
 
     class Meta:
