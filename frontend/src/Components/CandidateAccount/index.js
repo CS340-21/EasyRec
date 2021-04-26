@@ -401,7 +401,7 @@ const CandidateAccount = (props) => {
                     Send Request Email
                   </Button>
                   <div className={req_submitted ? `${classes.submitted}` : ""}>
-                    {req_submitted ? "Thank you for your submission!" : ""}
+                    {req_submitted ? "Your request has been sent!" : ""}
                   </div>
                 </>
               );
