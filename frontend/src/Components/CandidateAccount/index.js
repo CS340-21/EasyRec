@@ -30,6 +30,7 @@ const CandidateAccount = (props) => {
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
+  const [req_submitted, setReqSubmitted] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mainContent, setMainContent] = useState("WrittenLetters");
   const [user, setUser] = useState([]);
@@ -41,7 +42,7 @@ const CandidateAccount = (props) => {
     file: undefined,
   });
   let params = useParams();
-  const userId = params.id.toString().split(':')[1];
+  const userId = params.id.toString().split(":")[1];
   console.log(userId);
 
   /* Get User info from database */
@@ -75,7 +76,15 @@ const CandidateAccount = (props) => {
     ) {
       alert("Please fill all required fields");
     } else {
-      alert("Email is not set up yet but please check back soon");
+      setReqSubmitted(true);
+      values.title = "";
+      values.firstName = "";
+      values.lastName = "";
+      values.email = "";
+      setTimeout(() => {
+        setReqSubmitted(false);
+      }, 4000);
+      // alert("Email is not set up yet but please check back soon");
     }
   };
 
@@ -101,7 +110,7 @@ const CandidateAccount = (props) => {
     //   type: "application/json",
     // });
     // console.log(blob);
-    
+
     const data = new FormData();
     data.append("values", json);
     data.append("files", { file: letterFile });
@@ -391,6 +400,9 @@ const CandidateAccount = (props) => {
                   >
                     Send Request Email
                   </Button>
+                  <div className={req_submitted ? `${classes.submitted}` : ""}>
+                    {req_submitted ? "Thank you for your submission!" : ""}
+                  </div>
                 </>
               );
 
@@ -450,6 +462,10 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: "#5d6475",
     },
+  },
+  submitted: {
+    color: "red",
+    fontSize: "1.5em",
   },
 }));
 
