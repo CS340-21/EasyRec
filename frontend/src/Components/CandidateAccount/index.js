@@ -39,7 +39,7 @@ const CandidateAccount = (props) => {
     email: "",
   });
   let params = useParams();
-  const userId = params.id.toString().split(':')[1];
+  const userId = params.id.toString().split(":")[1];
 
   /* Get User info from database */
   useEffect(() => {
@@ -86,26 +86,31 @@ const CandidateAccount = (props) => {
 
   // TODO: THIS IS NOT WORKING YET, Seems like it might be a django integration issue, CORS error
   const uploadLetterToServer = (userid, recipEmail) => {
+    let data = { author_id: userid, email: recipEmail };
+
     const formData = new FormData();
     const fileField = document.querySelector('input[type="file"]');
 
     formData.append("author_id", userid);
     formData.append("email", recipEmail);
-    formData.append('file', fileField.files[0]);
+    // formData.append("data", data);
+    formData.append("file", fileField.files[0]);
+
+    let json = JSON.stringify(formData);
 
     fetch("https://eazyrec.herokuapp.com/api/upload/", {
-      method: 'POST',
-      body: formData
+      method: "POST",
+      body: formData,
     })
-    .then(response => response.json())
-    .then(result => {
-      console.log('Success:', result);
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    })
+      .then((response) => response.json())
+      .then((result) => {
+        console.log("Success:", result);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
-    
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -293,10 +298,10 @@ const CandidateAccount = (props) => {
                     rowsMax={4}
                     onChange={handleTextChange}
                   />
-                  <input 
+                  <input
                     type="file"
                     className={classes.inputButton}
-                    style={{ padding: "15px" }} 
+                    style={{ padding: "15px" }}
                   />
                   <Button
                     variant="contained"
@@ -440,13 +445,13 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "5px",
     "&:hover": {
       backgroundColor: "#5d6475",
-    }, 
+    },
   },
   uploadContainer: {
     height: "60vh",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-between" 
+    justifyContent: "space-between",
   },
 }));
 
