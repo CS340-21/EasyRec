@@ -105,8 +105,8 @@ export default function RecList({ letters, type }) {
                                         </button>
                                     </TableCell> :
                                     <TableCell align="center" style={{ width: "20px" }}>
-                                        <button className={classes.iconButton}>
-                                            <CloudDownloadIcon onClick={downloadLetter} />
+                                        <button className={classes.iconButton} onClick={() => {downloadLetter(letter.id)}} >
+                                            <CloudDownloadIcon />
                                         </button>
                                     </TableCell>}
                                 <TableCell style={{width: "20px"}}>

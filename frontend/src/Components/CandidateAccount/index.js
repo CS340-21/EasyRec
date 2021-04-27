@@ -106,8 +106,8 @@ const CandidateAccount = (props) => {
           data: data,
           headers: { "Content-Type": "application/json" }
         })
-        console.log(res.data);
-        setCampaignLetters(res.data);
+        console.log(res.data.my_campaigns);
+        setCampaignLetters(res.data.my_campaigns);
       } catch (error) {
         console.error(error);
       }
