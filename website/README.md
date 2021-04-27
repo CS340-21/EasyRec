@@ -76,3 +76,45 @@ files = {'file': open("example_file.txt", "rb")}
 values = {'author_id': '2', 'email': 'bobby@aol.com'}
 
 requests.post(url, files=files, data=values)
+
+
+
+
+### Get all campaigns owned by a user
+Route: api/campaigns/
+Request type: GET
+Payload: data = {‘user_id’}
+Fields: 
+- ‘user_id’ is the user’s id
+Returns:
+	If successful: status = 200, data = {“owner”: [ {“id” “name”, “camp_id”, … ]} 
+
+### Create new campaign
+Route: api/campaigns/
+Request type: POST
+Payload: data = {'owner', 'name'}
+Fields:
+- ‘owner’ is the user’s id
+- ‘name’ is the name of the campaign (e.g. Piano Tuner job)
+Returns:
+	If successful: 201
+
+### Send a letter to a campaign
+Route: api/add-campaign/
+Request type: PUT
+Payload: data = {'letter_id',  'camp_id'}
+Fields: 
+- ‘letter_id’ is letter’s actual id
+- ‘camp_id’ is Campaign field “camp_id”, not its actual id
+Returns:
+	If successful: status = 201
+	If unsuccessful: status = 417, data = {“Error”}
+
+Get all letters in a campaign
+	Route: ‘api/campaign-letters/’
+	Request type: GET
+	Payload: data = {‘campaign_id’}
+	Fields: 
+		‘campaign_id’ is the campaign’s actual id, not its camp_id
+	Returns:
+		If successful: status = 200, data = {“my_campaigns”: [{'id', 'author', 'candidate', 'title'}...]}
