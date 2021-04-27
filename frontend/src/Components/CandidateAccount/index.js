@@ -113,6 +113,7 @@ const CandidateAccount = (props) => {
       }
     };
     getCampaignLetters();
+    setPrevContent(mainContent);
     setMainContent("CampaignLetterList");
   };
 
@@ -616,7 +617,7 @@ const CandidateAccount = (props) => {
                                           <button className={classes.iconButton}>
                                               <ViewListIcon onClick={() => {
                                                 setCurrentCampaignName(campaign.name);
-                                                viewCampaignLetters(campaign.id)
+                                                viewCampaignLetters(campaign.id);
                                               }} />
                                           </button>
                                       </TableCell>
