@@ -33,6 +33,8 @@ urlpatterns = [
     path('api/campaign-letters/', campaign_views.CampaignLetters.as_view()),
     path('api/upload/', letter_views.RegisterView.as_view()),
     path('api/letter/<int:pk>', letter_views.LetterView.as_view()),
+    path('api/campaign/<int:pk>', campaign_views.CampaignView.as_view()),
+    path('api/download/', letter_views.GetLetter.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

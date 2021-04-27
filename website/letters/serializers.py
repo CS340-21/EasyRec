@@ -12,3 +12,11 @@ class LetterInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Letter
         fields = ('id', 'author', 'candidate', 'title', 'permissions')
+
+class LetterDownload(serializers.ModelSerializer):
+
+    file_doc = serializers.FileField()
+
+    class Meta:
+        model = Letter
+        fields = ('title', 'pub_date', 'file_doc')

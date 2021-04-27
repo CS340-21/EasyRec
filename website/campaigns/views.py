@@ -20,6 +20,12 @@ class CampaignLetters(APIView):
         serializer = CampLetters(snippet)
         return Response(serializer.data)
 
+    def post(self, request, format=None):
+        snippet = self.get_campaign(int(request.data['campaign_id']))
+        serializer = CampLetters(snippet)
+        return Response(serializer.data)
+
+    
 class CampaignView(APIView):
     def get(self, request, pk, format=None):
         snippet = self.get_object(pk)

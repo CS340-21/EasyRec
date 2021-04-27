@@ -55,6 +55,12 @@ class CampaignsView(APIView):
         serializer = UserCampaigns(snippet)
         return Response(serializer.data)
 
+    def put(self, request, format=None):        
+        snippet = self.get_user(int(request.data['user_id']))
+        serializer = UserCampaigns(snippet)
+        return Response(serializer.data)
+
+    
     def post(self, request, format=None):
         serializer = NewCampaign(data=request.data)
         if serializer.is_valid():

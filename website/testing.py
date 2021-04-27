@@ -31,14 +31,16 @@ elif len(sys.argv) == 3:
 elif len(sys.argv) == 4:
     if sys.argv[1] == "-n":
         num_samples = int(sys.argv[2])
-        #host = sys.argv[3]
+        host = sys.argv[3]
     elif sys.argv[2] == "-n":
         num_samples = int(sys.argv[3])
-        #host = sys.argv[1]
+        host = sys.argv[1]
     else:
         error_out()
         
 base_url = base_url.format(host)
+
+print("using base_url:", base_url)
 
 # ------------------ Create dummy data -------------------
 
@@ -130,11 +132,13 @@ print("Testing Letter Upload:")
 num_succesful = 0
 test_name = "Succesfully uploaded"
 r_path = base_url + "upload/"
+file_path = "ps_4_proof.pdf"
+#file_path = "test_file.txt"
 
 for i, user in enumerate(tqdm(user_data, bar_format='{l_bar}{bar:30}{r_bar}{bar:-30b}')):
     user_id = user_data[(i+1)%num_samples]['user_id']
     data = {"author_id": user_id, "email": user['email']}
-    files = {"file": open("test_file.txt", "rb")}
+    files = {"file": open(file_path, "rb")}
     receive = requests.post(r_path, files=files, data=data)
     if receive.status_code == 201:
         num_succesful += 1
@@ -225,7 +229,8 @@ r_path = base_url + 'campaigns/'
 
 for i, user in enumerate(tqdm(user_data, bar_format='{l_bar}{bar:30}{r_bar}{bar:-30b}')):
     data = {"user_id": user['user_id']}
-    receive = requests.get(r_path, data=data)
+    #receive = requests.get(r_path, data=data)
+    receive = requests.put(r_path, data=data)
     if receive.status_code == 200:
         num_succesful += 1
         cid = json.loads(receive.text)['owner'][0]['id']

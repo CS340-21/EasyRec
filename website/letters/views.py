@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import FileResponse
 
 # Create your views here.
 #from rest_framework import viewsets
@@ -14,7 +15,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import generics
 
-from .serializers import LetterSerializer, LetterInfoSerializer
+from .serializers import LetterSerializer, LetterInfoSerializer, LetterDownload
 
 from .models import Letter
 from campaigns.models import Campaign
@@ -44,13 +45,31 @@ class LetterView(APIView):
         letter.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-# accepts {'letter_id': ..., 'camp_id': ...}
-class AddCampaign(APIView):
-    def put(self, request):
-
-        #letter_id = int(request.data['letter_id'])
-        #camp_id = request.data['camp_id']
+class GetLetter(APIView):
+    def get_object(self, pk):
+        try:
+            return Letter.objects.get(pk=pk)
+        except Letter.DoesNotExist:
+            raise Http404
         
+    def get(self, request):
+        try:
+            snippet = self.get_object(int(request.data['letter_id']))
+        except:
+            return Response({"Error": "No letter with that id"},
+                            status=status.HTTP_417_EXPECTATION_FAILED)
+
+        file_handle = snippet.file_doc.open()
+
+        # send file
+        response = FileResponse(file_handle, content_type='txt')
+        response['Content-Length'] = snippet.file_doc.size
+        response['Content-Disposition'] = 'attachment; filename="%s"' % snippet.title
+
+        return response
+
+class AddCampaign(APIView):
+    def put(self, request):        
         try:
             letter = Letter.objects.get(pk=int(request.data['letter_id']))
         except:
@@ -95,7 +114,6 @@ class RegisterView(APIView):
             file_doc = file_obj,
             title = file_obj.name
         )
-
         letter.save()
 
         return Response(status=status.HTTP_201_CREATED)
