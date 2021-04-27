@@ -13,6 +13,7 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import Popover from '@material-ui/core/Popover';
 import { TextField } from "@material-ui/core";
+import axios from "axios";
 
 // create attended events table for current volunteer
 export default function RecList({ letters, type }) {
@@ -20,8 +21,27 @@ export default function RecList({ letters, type }) {
     const [recipientCode, setRecipientCode] = useState("");
     const [anchorEl, setAnchorEl] = useState(null);
 
-    const handleLetterSend = () => {
-        alert("Letter sending is not yet set up");
+    const handleLetterSend = (letterId, campCode) => {
+        const sendLetterToCampaign = async () => {
+            try {
+                const data = JSON.stringify({
+                    letter_id: letterId,
+                    camp_id: campCode,
+                });
+
+                await axios({
+                    method: "put",
+                    url: "https://eazyrec.herokuapp.com/api/add-campaign/",
+                    data: data,
+                    headers: { "Content-Type": "application/json" }
+                })
+                alert("Letter sent");
+            } catch (error) {
+                alert("Letter failed to send, check your code");
+                console.log(error);
+            }
+        };
+        sendLetterToCampaign();
     }
 
     const handlePopoverOpen = (event) => {
@@ -38,22 +58,18 @@ export default function RecList({ letters, type }) {
 
     /* Delete letter with id: letterId from the database */
     const handleLetterDelete = (letterId) => {
-        const deleteLetter = () => {
-            const reqOptions = {
-                method: "delete",
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8' // Indicates the content 
-                }
-            };
-        
-            fetch(`https://eazyrec.herokuapp.com/api/letter/${letterId}`, reqOptions).then(
-                async (res) => {
-                    let d = await res;
-                    console.log(d);
-                }
-            );
+        const deleteLetter = async () => {
+            try {
+                const res = await axios({
+                    method: "delete",
+                    url: `https://eazyrec.herokuapp.com/api/letter/${letterId}`,
+                    headers: { "Content-Type": "application/json" }
+                })
+                console.log(res);
+            } catch (error) {
+                console.log(error);
+            }
         };
-
         deleteLetter();
         window.location.reload();
     };
@@ -119,19 +135,24 @@ export default function RecList({ letters, type }) {
                                             value={recipientCode}
                                             onChange={handleTextChange}
                                         />
-                                        <button className={classes.iconButton}>
-                                            <PublishIcon 
-                                                style={{ marginTop: "15px" }}
-                                                onClick={handleLetterSend} 
-                                            />
+                                        <button 
+                                            className={classes.iconButton}
+                                            onClick={() => {
+                                                handleLetterSend(letter.id, recipientCode)
+                                            }} 
+                                        >
+                                            <PublishIcon style={{ marginTop: "15px" }} />
                                         </button>
                                     </Popover>
                                 </TableCell>
                                 <TableCell>
-                                    <button className={classes.iconButton}>
-                                        <DeleteIcon onClick={() => {
+                                    <button 
+                                        className={classes.iconButton} 
+                                        onClick={() => {
                                             handleLetterDelete(letter.id);
-                                        }} />
+                                        }} 
+                                    >
+                                        <DeleteIcon />
                                     </button>
                                 </TableCell>
                             </TableRow>

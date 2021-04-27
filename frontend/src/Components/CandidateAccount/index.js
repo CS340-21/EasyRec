@@ -215,7 +215,10 @@ const CandidateAccount = (props) => {
         <ListItem
           button
           key="WrittenLetters"
-          onClick={() => setMainContent("WrittenLetters")}
+          onClick={() => {
+            setPrevContent(mainContent);
+            setMainContent("WrittenLetters");
+          }}
         >
           <ListItemIcon>
             <HomeIcon />
@@ -225,7 +228,10 @@ const CandidateAccount = (props) => {
         <ListItem
           button
           key="ReceivedLetters"
-          onClick={() => setMainContent("ReceivedLetters")}
+          onClick={() => {
+            setPrevContent(mainContent);
+            setMainContent("ReceivedLetters");
+          }}
         >
           <ListItemIcon>
             <ListIcon />
@@ -235,7 +241,10 @@ const CandidateAccount = (props) => {
         <ListItem
           button
           key="RequestLetter"
-          onClick={() => setMainContent("RequestLetter")}
+          onClick={() => {
+            setPrevContent(mainContent);
+            setMainContent("RequestLetter");
+          }}
         >
           <ListItemIcon>
             <SendIcon />
@@ -245,7 +254,10 @@ const CandidateAccount = (props) => {
         <ListItem
           button
           key="UploadLetter"
-          onClick={() => setMainContent("UploadLetter")}
+          onClick={() => {
+            setPrevContent(mainContent);   
+            setMainContent("UploadLetter");
+          }}
         >
           <ListItemIcon>
             <CloudUploadIcon />
@@ -255,7 +267,10 @@ const CandidateAccount = (props) => {
         <ListItem
           button
           key="Campaigns"
-          onClick={() => setMainContent("Campaigns")}
+          onClick={() => {
+            setPrevContent(mainContent);
+            setMainContent("Campaigns");
+          }}
         >
           <ListItemIcon>
             <GroupWorkIcon />
@@ -265,7 +280,10 @@ const CandidateAccount = (props) => {
         <ListItem
           button
           key="NewCampaign"
-          onClick={() => setMainContent("NewCampaign")}
+          onClick={() => {
+            setPrevContent(mainContent);
+            setMainContent("NewCampaign");
+          }}
         >
           <ListItemIcon>
             <AddIcon />
