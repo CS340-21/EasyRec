@@ -10,11 +10,12 @@ import PublishIcon from '@material-ui/icons/Publish';
 import DeleteIcon from '@material-ui/icons/Delete';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import Popover from '@material-ui/core/Popover';
 import { TextField } from "@material-ui/core";
 
 // create attended events table for current volunteer
-export default function RecList({ letters }) {
+export default function RecList({ letters, type }) {
     const classes = useStyles();
     const [recipientCode, setRecipientCode] = useState("");
     const [anchorEl, setAnchorEl] = useState(null);
@@ -57,6 +58,11 @@ export default function RecList({ letters }) {
         window.location.reload();
     };
 
+    /* Download letter with id: letterId from the database -- API not set up yet */
+    const downloadLetter = (letterId) => {
+        alert(`Letter with id: ${letterId} to be downloaded`);
+    };
+
     const popoverOpen = Boolean(anchorEl);
     const popoverId = popoverOpen ? "simple-popover" : undefined;
 
@@ -76,11 +82,17 @@ export default function RecList({ letters }) {
                                 <TableCell align="center">
                                     {letter.pub_date.split('T')[0]}
                                 </TableCell>
-                                <TableCell align="center">
-                                    <button className={classes.iconButton}>
-                                        {letter.permissions === 0 ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                                    </button>
-                                </TableCell>
+                                {type === "user" ?
+                                    <TableCell align="center" style={{ width: "20px" }}>
+                                        <button className={classes.iconButton}>
+                                            {letter.permissions === 0 ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                                        </button>
+                                    </TableCell> :
+                                    <TableCell align="center" style={{ width: "20px" }}>
+                                        <button className={classes.iconButton}>
+                                            <CloudDownloadIcon onClick={downloadLetter} />
+                                        </button>
+                                    </TableCell>}
                                 <TableCell style={{width: "20px"}}>
                                     <button className={classes.iconButton}>
                                         <PublishIcon onClick={handlePopoverOpen} />

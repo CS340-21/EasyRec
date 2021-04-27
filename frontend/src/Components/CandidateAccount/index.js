@@ -19,6 +19,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import SendIcon from "@material-ui/icons/Send";
 import ListIcon from "@material-ui/icons/ViewList";
 import MenuIcon from "@material-ui/icons/Menu";
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { createStyles, makeStyles, useTheme } from "@material-ui/core/styles";
@@ -46,6 +47,7 @@ const CandidateAccount = (props) => {
   const [campaigns, setCampaigns] = useState([]);
   const [campaignLetters, setCampaignLetters] = useState([]);
   const [currentCampaignName, setCurrentCampaignName] = useState("");
+  const [prevContent, setPrevContent] = useState("");
   const [values, setValues] = useState({
     title: "",
     firstName: "",
@@ -83,7 +85,6 @@ const CandidateAccount = (props) => {
           data: data,
           headers: { "Content-Type": "application/json" }
         })
-        console.log(res.data.owner);
         setCampaigns(res.data.owner);
       } catch (error) {
         console.error(error)
@@ -296,49 +297,131 @@ const CandidateAccount = (props) => {
             switch (mainContent) {
               case "ReceivedLetters":
                 return (
-                  <Typography variant="h6" noWrap>
-                    Received Letters of Recommendation
-                  </Typography>
+                  <div style={{ display: "flex" }}>
+                    <KeyboardBackspaceIcon 
+                      style={{ marginRight: "20px" }} 
+                      onClick={() => {
+                        const cur = mainContent;
+                        setMainContent(prevContent);
+                        setPrevContent(cur);
+                      }}
+                    />
+                    <Typography variant="h6" noWrap>
+                      Received Letters of Recommendation
+                    </Typography>
+                  </div>
                 );
 
               case "RequestLetter":
                 return (
-                  <Typography variant="h6" noWrap>
-                    Request Letter of Recommendation
-                  </Typography>
+                  <div style={{ display: "flex" }}>
+                    <button className={classes.iconButton}>
+                      <KeyboardBackspaceIcon 
+                        style={{ marginRight: "20px" }} 
+                        onClick={() => {
+                          const cur = mainContent;
+                          setMainContent(prevContent);
+                          setPrevContent(cur);
+                        }}
+                      />
+                    </button>
+                    <Typography variant="h6" noWrap>
+                      Request Letter of Recommendation
+                    </Typography>
+                  </div>
                 );
 
               case "UploadLetter":
                 return (
-                  <Typography variant="h6" noWrap>
-                    Upload Letter of Recommendation
-                  </Typography>
+                  <div style={{ display: "flex" }}>
+                    <button className={classes.iconButton}>
+                      <KeyboardBackspaceIcon 
+                        style={{ marginRight: "20px" }} 
+                        onClick={() => {
+                          const cur = mainContent;
+                          setMainContent(prevContent);
+                          setPrevContent(cur);
+                        }}
+                      />
+                    </button>
+                    <Typography variant="h6" noWrap>
+                      Upload Letter of Recommendation
+                    </Typography>
+                  </div>
                 );
 
               case "Campaigns":
                 return (
-                  <Typography variant="h6" noWrap>
-                    Your Active Campaigns
-                  </Typography>
+                  <div style={{ display: "flex" }}>
+                    <button className={classes.iconButton}>
+                      <KeyboardBackspaceIcon 
+                        style={{ marginRight: "20px" }} 
+                        onClick={() => {
+                          const cur = mainContent;
+                          setMainContent(prevContent);
+                          setPrevContent(cur);
+                        }}
+                      />
+                    </button>
+                    <Typography variant="h6" noWrap>
+                      Your Active Campaigns
+                    </Typography>
+                  </div>
                 );
               case "CampaignLetterList":
                 return (
-                  <Typography variant="h6" noWrap>
-                    {currentCampaignName} Letters
-                  </Typography>
+                  <div style={{ display: "flex" }}>
+                    <button className={classes.iconButton}>
+                      <KeyboardBackspaceIcon 
+                        style={{ marginRight: "20px" }} 
+                        onClick={() => {
+                          const cur = mainContent;
+                          setMainContent(prevContent);
+                          setPrevContent(cur);
+                        }}
+                      />
+                    </button>
+                    <Typography variant="h6" noWrap>
+                      {currentCampaignName} Letters
+                    </Typography>
+                  </div>
                 );
               case "NewCampaign":
                 return (
-                  <Typography variant="h6" noWrap>
-                    Create a New Campaign
-                  </Typography>
+                  <div style={{ display: "flex" }}>
+                    <button className={classes.iconButton}>
+                      <KeyboardBackspaceIcon 
+                        style={{ marginRight: "20px" }} 
+                        onClick={() => {
+                          const cur = mainContent;
+                          setMainContent(prevContent);
+                          setPrevContent(cur);
+                        }}
+                      />
+                    </button>
+                    <Typography variant="h6" noWrap>
+                      Create a New Campaign
+                    </Typography>
+                  </div>
                 );
 
               default:
                 return (
-                  <Typography variant="h6" noWrap>
-                    Written Letters of Recommendation
-                  </Typography>
+                  <div style={{ display: "flex" }}>
+                    <button className={classes.iconButton}>
+                      <KeyboardBackspaceIcon 
+                        style={{ marginRight: "20px" }} 
+                        onClick={() => {
+                          const cur = mainContent;
+                          setMainContent(prevContent);
+                          setPrevContent(cur);
+                        }}
+                      />
+                    </button>
+                    <Typography variant="h6" noWrap>
+                      Written Letters of Recommendation
+                    </Typography>
+                  </div>
                 );
             }
           })()}
@@ -529,7 +612,7 @@ const CandidateAccount = (props) => {
               );
 
             case "CampaignLetterList":
-              return <RecList letters={campaignLetters === undefined ? [] : campaignLetters} />;
+              return <RecList letters={campaignLetters === undefined ? [] : campaignLetters} type={"campaign"} />;
 
             case "NewCampaign":
               return (
@@ -569,7 +652,7 @@ const CandidateAccount = (props) => {
 
             default:
               //this is the user's written letters
-              return <RecList letters={user.written === undefined ? [] : user.written} />;
+              return <RecList letters={user.written === undefined ? [] : user.written} type={"user"} />;
           }
         })()}
       </main>
