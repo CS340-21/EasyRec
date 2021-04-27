@@ -13,6 +13,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import ViewListIcon from "@material-ui/icons/ViewList";
+import AddIcon from '@material-ui/icons/Add';
 import GroupWorkIcon from "@material-ui/icons/GroupWork";
 import DeleteIcon from '@material-ui/icons/Delete';
 import SendIcon from "@material-ui/icons/Send";
@@ -31,13 +32,14 @@ import RecList from "../RecList";
 import axios from "axios";
 import { TextField, Button } from "@material-ui/core";
 
-const drawerWidth = 175;
+const drawerWidth = 225;
 
 const CandidateAccount = (props) => {
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [req_submitted, setReqSubmitted] = useState(false);
+  const [newCampSubmitted, setNewCampSubmitted] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mainContent, setMainContent] = useState("WrittenLetters");
   const [user, setUser] = useState([]);
@@ -141,6 +143,33 @@ const CandidateAccount = (props) => {
     }
   };
 
+  const handleNewCampaignSubmitButton = () => {
+    if (values.title === "") {
+      alert("Please enter a title");
+    } else {
+      submitNewCampaign(userId, values.title);
+    }
+  };
+
+  const submitNewCampaign = (userid, title) => {
+    try {
+      const data = JSON.stringify({
+        owner: userid,
+        name: title,
+      });
+
+      axios({
+        method: "post",
+        url: "https://eazyrec.herokuapp.com/api/campaigns/",
+        data: data,
+        headers: { "Content-Type": "application/json" }
+      });
+      setNewCampSubmitted(true);
+    } catch (error) {
+      console.error(error)
+    }
+  };
+
   const handleSubmitLetterUpload = () => {
     if (values.title === "" || values.email === "") {
       alert("Please fill all required fields");
@@ -232,6 +261,16 @@ const CandidateAccount = (props) => {
           </ListItemIcon>
           <ListItemText primary="Campaigns" />
         </ListItem>
+        <ListItem
+          button
+          key="NewCampaign"
+          onClick={() => setMainContent("NewCampaign")}
+        >
+          <ListItemIcon>
+            <AddIcon />
+          </ListItemIcon>
+          <ListItemText primary="New Campaign" />
+        </ListItem>
       </List>
     </div>
   );
@@ -286,6 +325,12 @@ const CandidateAccount = (props) => {
                 return (
                   <Typography variant="h6" noWrap>
                     {currentCampaignName} Letters
+                  </Typography>
+                );
+              case "NewCampaign":
+                return (
+                  <Typography variant="h6" noWrap>
+                    Create a New Campaign
                   </Typography>
                 );
 
@@ -463,9 +508,6 @@ const CandidateAccount = (props) => {
                                       <TableCell component="th" scope="row">
                                           {campaign.name}
                                       </TableCell>
-                                      <TableCell component="th" scope="row">
-                                          {campaign.description}
-                                      </TableCell>
                                       <TableCell style={{width: "20px"}}>
                                           <button className={classes.iconButton}>
                                               <ViewListIcon onClick={() => {
@@ -474,7 +516,7 @@ const CandidateAccount = (props) => {
                                               }} />
                                           </button>
                                       </TableCell>
-                                      <TableCell>
+                                      <TableCell style={{ width: "20px" }}>
                                           <button className={classes.iconButton}>
                                               <DeleteIcon />
                                           </button>
@@ -488,6 +530,42 @@ const CandidateAccount = (props) => {
 
             case "CampaignLetterList":
               return <RecList letters={campaignLetters === undefined ? [] : campaignLetters} />;
+
+            case "NewCampaign":
+              return (
+                <>
+                  <div className={classes.requestFormContainer}>
+                    <Typography paragraph>
+                      <TextField
+                        style={{
+                          marginRight: "10px",
+                          marginBottom: "10px",
+                          width: "550px",
+                        }}
+                        id="title"
+                        label="Title"
+                        type="text"
+                        variant="outlined"
+                        value={values.title}
+                        rowsMax={4}
+                        onChange={handleTextChange}
+                      />
+                    </Typography>
+                  </div>
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    className={classes.button}
+                    style={{ marginTop: "30px", padding: "20px" }}
+                    onClick={handleNewCampaignSubmitButton}
+                  >
+                    Create Campaign
+                  </Button>
+                  <div className={newCampSubmitted ? `${classes.submitted}` : ""}>
+                    {newCampSubmitted ? "Your request has been sent!" : ""}
+                  </div>
+                </>
+              );
 
             default:
               //this is the user's written letters
