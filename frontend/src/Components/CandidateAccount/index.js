@@ -12,13 +12,21 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import ViewListIcon from "@material-ui/icons/ViewList";
 import GroupWorkIcon from "@material-ui/icons/GroupWork";
+import DeleteIcon from '@material-ui/icons/Delete';
 import SendIcon from "@material-ui/icons/Send";
 import ListIcon from "@material-ui/icons/ViewList";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { createStyles, makeStyles, useTheme } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 import RecList from "../RecList";
 import axios from "axios";
 import { TextField, Button } from "@material-ui/core";
@@ -34,6 +42,9 @@ const CandidateAccount = (props) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mainContent, setMainContent] = useState("WrittenLetters");
   const [user, setUser] = useState([]);
+  const [campaigns, setCampaigns] = useState([]);
+  const [campaignLetters, setCampaignLetters] = useState([]);
+  const [currentCampaignName, setCurrentCampaignName] = useState("");
   const [values, setValues] = useState({
     title: "",
     firstName: "",
@@ -59,6 +70,51 @@ const CandidateAccount = (props) => {
     };
     getUser();
   }, [userId]);
+
+  useEffect(() => {
+    const getCampaigns = async () => {
+      try {
+        const data = JSON.stringify({
+          user_id: userId,
+        });
+
+        const res = await axios({
+          method: "put",
+          url: "https://eazyrec.herokuapp.com/api/campaigns/",
+          data: data,
+          headers: { "Content-Type": "application/json" }
+        })
+        console.log(res.data.owner);
+        setCampaigns(res.data.owner);
+      } catch (error) {
+        console.error(error)
+      }
+    };
+    getCampaigns();
+  }, [userId]);
+
+  const viewCampaignLetters = (campaignId) => {
+    const getCampaignLetters = async () => {
+      try {
+        const data = JSON.stringify({
+          campaign_id: campaignId,
+        });
+
+        const res = await axios({
+          method: "post",
+          url: "https://eazyrec.herokuapp.com/api/campaign-letters/",
+          data: data,
+          headers: { "Content-Type": "application/json" }
+        })
+        console.log(res.data);
+        setCampaignLetters(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getCampaignLetters();
+    setMainContent("CampaignLetterList");
+  };
 
   /* Functions to handle input and button clicks */
   const handleTextChange = (event) => {
@@ -233,6 +289,12 @@ const CandidateAccount = (props) => {
                     Your Active Campaigns
                   </Typography>
                 );
+              case "CampaignLetterList":
+                return (
+                  <Typography variant="h6" noWrap>
+                    {currentCampaignName} Letters
+                  </Typography>
+                );
 
               default:
                 return (
@@ -280,7 +342,7 @@ const CandidateAccount = (props) => {
         {(() => {
           switch (mainContent) {
             case "ReceivedLetters":
-              return <RecList user={user} letterType="received" />;
+              return <RecList letters={user.received === undefined ? [] : user.received} />;
 
             case "UploadLetter":
               return (
@@ -407,11 +469,45 @@ const CandidateAccount = (props) => {
               );
 
             case "Campaigns":
-              return <h1>Hi this is not done yet</h1>;
+              return (
+                <TableContainer component={Paper} className={classes.tableContainer}>
+                  <Table aria-label="simple table">
+                      <TableBody>
+                          {campaigns.length > 0 &&
+                              campaigns.map(campaign => (
+                                  <TableRow key={campaign.name}>
+                                      <TableCell component="th" scope="row">
+                                          {campaign.name}
+                                      </TableCell>
+                                      <TableCell component="th" scope="row">
+                                          {campaign.description}
+                                      </TableCell>
+                                      <TableCell style={{width: "20px"}}>
+                                          <button className={classes.iconButton}>
+                                              <ViewListIcon onClick={() => {
+                                                setCurrentCampaignName(campaign.name);
+                                                viewCampaignLetters(campaign.id)
+                                              }} />
+                                          </button>
+                                      </TableCell>
+                                      <TableCell>
+                                          <button className={classes.iconButton}>
+                                              <DeleteIcon />
+                                          </button>
+                                      </TableCell>
+                                  </TableRow>
+                              ))}
+                      </TableBody>
+                  </Table>
+                </TableContainer>
+              );
+
+            case "CampaignLetterList":
+              return <RecList letters={campaignLetters === undefined ? [] : campaignLetters} />;
 
             default:
               //this is the user's written letters
-              return <RecList user={user} letterType="written" />;
+              return <RecList letters={user.written === undefined ? [] : user.written} />;
           }
         })()}
       </main>
@@ -462,6 +558,36 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: "#5d6475",
     },
+  },
+  tableContainer: {
+    width: "100%",
+    minWidth: "300px",
+    maxWidth: "1400px",
+    minHeight: "450px",
+    padding: "10px 8px",
+  },
+  tableFooter: {
+      marginTop: "45px",
+      height: "35px",
+      width: "100%",
+      display: "flex",
+      alignItems: "end",
+      justifyContent: "space-between",
+  },
+  iconButton: {
+      background: "none",
+      outline: "none",
+      borderStyle: "none",
+      "&:hover": {
+          outline: "none",
+          cursor: "pointer",
+          border: "none",
+      },
+      "&:active": {
+          outline: "none",
+          transform: "scale(.75)",
+          border: "none",
+      },
   },
   submitted: {
     color: "red",

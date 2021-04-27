@@ -14,7 +14,7 @@ import Popover from '@material-ui/core/Popover';
 import { TextField } from "@material-ui/core";
 
 // create attended events table for current volunteer
-export default function RecList({ user, letterType }) {
+export default function RecList({ letters }) {
     const classes = useStyles();
     const [recipientCode, setRecipientCode] = useState("");
     const [anchorEl, setAnchorEl] = useState(null);
@@ -59,13 +59,6 @@ export default function RecList({ user, letterType }) {
 
     const popoverOpen = Boolean(anchorEl);
     const popoverId = popoverOpen ? "simple-popover" : undefined;
-
-    let letters;
-    if (letterType === "written") {
-        letters = user.written ? user.written : [];
-    } else {
-        letters = user.received ? user.received : [];
-    }
 
     return (
         <TableContainer component={Paper} className={classes.tableContainer}>
