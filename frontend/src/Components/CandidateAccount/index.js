@@ -30,7 +30,6 @@ import Paper from "@material-ui/core/Paper";
 import RecList from "../RecList";
 import axios from "axios";
 import { TextField, Button } from "@material-ui/core";
-import { DropzoneArea } from "material-ui-dropzone";
 
 const drawerWidth = 175;
 
@@ -50,11 +49,9 @@ const CandidateAccount = (props) => {
     firstName: "",
     lastName: "",
     email: "",
-    file: undefined,
   });
   let params = useParams();
   const userId = params.id.toString().split(":")[1];
-  console.log(userId);
 
   /* Get User info from database */
   useEffect(() => {
@@ -145,39 +142,35 @@ const CandidateAccount = (props) => {
   };
 
   const handleSubmitLetterUpload = () => {
-    if (values.title === "" || values.email === "" || !values.file) {
+    if (values.title === "" || values.email === "") {
       alert("Please fill all required fields");
     } else {
-      uploadLetterToServer(user.id, values.email, values.file);
+      uploadLetterToServer(user.id, values.email);
     }
   };
 
-  // TODO: THIS IS NOT WORKING YET
-  const uploadLetterToServer = (userid, recipEmail, letterFile) => {
-    const obj = {
-      author_id: userid,
-      email: recipEmail,
-    };
-    console.log(typeof letterFile[0]);
-    console.log(letterFile);
-    const json = JSON.stringify(obj);
+  // TODO: THIS IS NOT WORKING YET, Seems like it might be a django integration issue, CORS error
+  const uploadLetterToServer = (userid, recipEmail) => {
+    const formData = new FormData();
+    const fileField = document.querySelector('input[type="file"]');
 
-    // const blob = new Blob([json], {
-    //   type: "application/json",
-    // });
-    // console.log(blob);
+    formData.append("author_id", userid);
+    formData.append("email", recipEmail);
+    // formData.append("data", data);
+    formData.append("file", fileField.files[0]);
 
-    const data = new FormData();
-    data.append("values", json);
-    data.append("files", { file: letterFile });
-    // console.log(data);
-    axios({
-      method: "post",
-      url: "https://eazyrec.herokuapp.com/api/upload/",
-      data: data,
+    fetch("https://eazyrec.herokuapp.com/api/upload/", {
+      method: "POST",
+      body: formData,
+
     })
-      .then((res) => console.log(res))
-      .catch((res) => console.log(res));
+      .then((response) => response.json())
+      .then((result) => {
+        console.log("Success:", result);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   const handleDrawerToggle = () => {
@@ -346,11 +339,9 @@ const CandidateAccount = (props) => {
 
             case "UploadLetter":
               return (
-                <>
+                <div className={classes.uploadContainer}>
                   <TextField
                     style={{
-                      marginTop: "40px",
-                      marginRight: "500px",
                       width: "40%",
                     }}
                     id="title"
@@ -364,8 +355,6 @@ const CandidateAccount = (props) => {
                   />
                   <TextField
                     style={{
-                      marginTop: "40px",
-                      marginBottom: "40px",
                       width: "40%",
                     }}
                     id="email"
@@ -377,26 +366,21 @@ const CandidateAccount = (props) => {
                     rowsMax={4}
                     onChange={handleTextChange}
                   />
-                  <DropzoneArea
-                    acceptedFiles={[".pdf"]}
-                    dropzoneText={
-                      "Drag and drop a pdf of the letter here or click to upload"
-                    }
-                    showFileNames
-                    onChange={(upload) => {
-                      values.file = upload;
-                    }}
+                  <input
+                    type="file"
+                    className={classes.inputButton}
+                    style={{ padding: "15px" }}
                   />
                   <Button
                     variant="contained"
                     type="submit"
                     className={classes.button}
-                    style={{ marginTop: "50px", padding: "20px" }}
+                    style={{ padding: "20px" }}
                     onClick={handleSubmitLetterUpload}
                   >
                     Submit Letter Upload
                   </Button>
-                </>
+                </div>
               );
 
             case "RequestLetter":
@@ -554,10 +538,25 @@ const useStyles = makeStyles((theme) => ({
   button: {
     backgroundColor: "#343d52",
     color: "white",
-    minWidth: "30%",
+    width: "300px",
     "&:hover": {
       backgroundColor: "#5d6475",
     },
+  },
+  inputButton: {
+    backgroundColor: "#343d52",
+    color: "white",
+    width: "300px",
+    borderRadius: "5px",
+    "&:hover": {
+      backgroundColor: "#5d6475",
+    },
+  },
+  uploadContainer: {
+    height: "60vh",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
   },
   tableContainer: {
     width: "100%",
