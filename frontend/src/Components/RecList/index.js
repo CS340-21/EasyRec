@@ -13,6 +13,7 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import Popover from '@material-ui/core/Popover';
 import { TextField } from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
 import axios from "axios";
 
 // create attended events table for current volunteer
@@ -86,7 +87,7 @@ export default function RecList({ letters, type }) {
         <TableContainer component={Paper} className={classes.tableContainer}>
             <Table aria-label="simple table">
                 <TableBody>
-                    {letters.length > 0 &&
+                    {letters.length > 0 ?
                         letters.map(letter => (
                             <TableRow key={letter.id}>
                                 <TableCell component="th" scope="row">
@@ -156,7 +157,10 @@ export default function RecList({ letters, type }) {
                                     </button>
                                 </TableCell>
                             </TableRow>
-                        ))}
+                        )) :
+                        <Typography variant="h5" noWrap style={{ marginLeft: "35%", marginTop: "15%"}}>
+                            No Letters Found
+                        </Typography>}
                 </TableBody>
             </Table>
         </TableContainer>
