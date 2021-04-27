@@ -609,6 +609,9 @@ const CandidateAccount = (props) => {
                                       <TableCell component="th" scope="row">
                                           {campaign.name}
                                       </TableCell>
+                                      <TableCell component="th" scope="row">
+                                          {campaign.camp_id}
+                                      </TableCell>
                                       <TableCell style={{width: "20px"}}>
                                           <button className={classes.iconButton}>
                                               <ViewListIcon onClick={() => {
