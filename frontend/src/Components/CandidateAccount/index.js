@@ -86,8 +86,6 @@ const CandidateAccount = (props) => {
 
   // TODO: THIS IS NOT WORKING YET, Seems like it might be a django integration issue, CORS error
   const uploadLetterToServer = (userid, recipEmail) => {
-    let data = { author_id: userid, email: recipEmail };
-
     const formData = new FormData();
     const fileField = document.querySelector('input[type="file"]');
 
@@ -95,8 +93,6 @@ const CandidateAccount = (props) => {
     formData.append("email", recipEmail);
     // formData.append("data", data);
     formData.append("file", fileField.files[0]);
-
-    let json = JSON.stringify(formData);
 
     fetch("https://eazyrec.herokuapp.com/api/upload/", {
       method: "POST",
